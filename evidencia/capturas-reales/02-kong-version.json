@@ -1,0 +1,823 @@
+﻿{
+    "plugins":  {
+                    "available_on_server":  {
+                                                "pre-function":  {
+                                                                     "priority":  1000000,
+                                                                     "version":  "3.9.5"
+                                                                 },
+                                                "post-function":  {
+                                                                      "priority":  -1000,
+                                                                      "version":  "3.9.5"
+                                                                  },
+                                                "azure-functions":  {
+                                                                        "priority":  749,
+                                                                        "version":  "3.9.5"
+                                                                    },
+                                                "zipkin":  {
+                                                               "priority":  100000,
+                                                               "version":  "3.9.5"
+                                                           },
+                                                "opentelemetry":  {
+                                                                      "priority":  14,
+                                                                      "version":  "3.9.5"
+                                                                  },
+                                                "ai-proxy":  {
+                                                                 "priority":  770,
+                                                                 "version":  "3.9.5"
+                                                             },
+                                                "ai-prompt-decorator":  {
+                                                                            "priority":  772,
+                                                                            "version":  "3.9.5"
+                                                                        },
+                                                "ai-prompt-template":  {
+                                                                           "priority":  773,
+                                                                           "version":  "3.9.5"
+                                                                       },
+                                                "ai-prompt-guard":  {
+                                                                        "priority":  771,
+                                                                        "version":  "3.9.5"
+                                                                    },
+                                                "ai-request-transformer":  {
+                                                                               "priority":  777,
+                                                                               "version":  "3.9.5"
+                                                                           },
+                                                "ai-response-transformer":  {
+                                                                                "priority":  768,
+                                                                                "version":  "3.9.5"
+                                                                            },
+                                                "standard-webhooks":  {
+                                                                          "priority":  760,
+                                                                          "version":  "3.9.5"
+                                                                      },
+                                                "jwt":  {
+                                                            "priority":  1450,
+                                                            "version":  "3.9.5"
+                                                        },
+                                                "acl":  {
+                                                            "priority":  950,
+                                                            "version":  "3.9.5"
+                                                        },
+                                                "correlation-id":  {
+                                                                       "priority":  100001,
+                                                                       "version":  "3.9.5"
+                                                                   },
+                                                "cors":  {
+                                                             "priority":  2000,
+                                                             "version":  "3.9.5"
+                                                         },
+                                                "oauth2":  {
+                                                               "priority":  1400,
+                                                               "version":  "3.9.5"
+                                                           },
+                                                "tcp-log":  {
+                                                                "priority":  7,
+                                                                "version":  "3.9.5"
+                                                            },
+                                                "udp-log":  {
+                                                                "priority":  8,
+                                                                "version":  "3.9.5"
+                                                            },
+                                                "file-log":  {
+                                                                 "priority":  9,
+                                                                 "version":  "3.9.5"
+                                                             },
+                                                "http-log":  {
+                                                                 "priority":  12,
+                                                                 "version":  "3.9.5"
+                                                             },
+                                                "key-auth":  {
+                                                                 "priority":  1250,
+                                                                 "version":  "3.9.5"
+                                                             },
+                                                "hmac-auth":  {
+                                                                  "priority":  1030,
+                                                                  "version":  "3.9.5"
+                                                              },
+                                                "basic-auth":  {
+                                                                   "priority":  1100,
+                                                                   "version":  "3.9.5"
+                                                               },
+                                                "ip-restriction":  {
+                                                                       "priority":  990,
+                                                                       "version":  "3.9.5"
+                                                                   },
+                                                "request-transformer":  {
+                                                                            "priority":  801,
+                                                                            "version":  "3.9.5"
+                                                                        },
+                                                "redirect":  {
+                                                                 "priority":  779,
+                                                                 "version":  "3.9.5"
+                                                             },
+                                                "response-transformer":  {
+                                                                             "priority":  800,
+                                                                             "version":  "3.9.5"
+                                                                         },
+                                                "request-size-limiting":  {
+                                                                              "priority":  951,
+                                                                              "version":  "3.9.5"
+                                                                          },
+                                                "rate-limiting":  {
+                                                                      "priority":  910,
+                                                                      "version":  "3.9.5"
+                                                                  },
+                                                "response-ratelimiting":  {
+                                                                              "priority":  900,
+                                                                              "version":  "3.9.5"
+                                                                          },
+                                                "syslog":  {
+                                                               "priority":  4,
+                                                               "version":  "3.9.5"
+                                                           },
+                                                "loggly":  {
+                                                               "priority":  6,
+                                                               "version":  "3.9.5"
+                                                           },
+                                                "datadog":  {
+                                                                "priority":  10,
+                                                                "version":  "3.9.5"
+                                                            },
+                                                "ldap-auth":  {
+                                                                  "priority":  1200,
+                                                                  "version":  "3.9.5"
+                                                              },
+                                                "statsd":  {
+                                                               "priority":  11,
+                                                               "version":  "3.9.5"
+                                                           },
+                                                "bot-detection":  {
+                                                                      "priority":  2500,
+                                                                      "version":  "3.9.5"
+                                                                  },
+                                                "aws-lambda":  {
+                                                                   "priority":  750,
+                                                                   "version":  "3.9.5"
+                                                               },
+                                                "request-termination":  {
+                                                                            "priority":  2,
+                                                                            "version":  "3.9.5"
+                                                                        },
+                                                "prometheus":  {
+                                                                   "priority":  13,
+                                                                   "version":  "3.9.5"
+                                                               },
+                                                "proxy-cache":  {
+                                                                    "priority":  100,
+                                                                    "version":  "3.9.5"
+                                                                },
+                                                "session":  {
+                                                                "priority":  1900,
+                                                                "version":  "3.9.5"
+                                                            },
+                                                "acme":  {
+                                                             "priority":  1705,
+                                                             "version":  "3.9.5"
+                                                         },
+                                                "grpc-gateway":  {
+                                                                     "priority":  998,
+                                                                     "version":  "3.9.5"
+                                                                 },
+                                                "grpc-web":  {
+                                                                 "priority":  3,
+                                                                 "version":  "3.9.5"
+                                                             }
+                                            },
+                    "enabled_in_cluster":  [
+                                               "rate-limiting",
+                                               "key-auth"
+                                           ]
+                },
+    "hostname":  "ced3a703fff8",
+    "pids":  {
+                 "master":  1,
+                 "workers":  [
+                                 1406,
+                                 1407,
+                                 1408,
+                                 1409,
+                                 1410,
+                                 1411,
+                                 1412,
+                                 1413
+                             ]
+             },
+    "tagline":  "Welcome to kong",
+    "configuration":  {
+                          "prefix":  "/usr/local/kong",
+                          "proxy_listen":  [
+                                               "0.0.0.0:8000"
+                                           ],
+                          "stream_listen":  [
+                                                "off"
+                                            ],
+                          "stream_proxy_ssl_enabled":  false,
+                          "admin_listen":  [
+                                               "0.0.0.0:8001"
+                                           ],
+                          "admin_ssl_enabled":  false,
+                          "admin_gui_listen":  [
+                                                   "0.0.0.0:8002",
+                                                   "0.0.0.0:8445 ssl"
+                                               ],
+                          "admin_gui_ssl_cert_key_default_ecdsa":  "/usr/local/kong/ssl/admin-gui-kong-default-ecdsa.key",
+                          "status_listen":  [
+                                                "127.0.0.1:8007 reuseport backlog=16384"
+                                            ],
+                          "status_ssl_cert_default":  "/usr/local/kong/ssl/status-kong-default.crt",
+                          "cluster_listen":  [
+                                                 "0.0.0.0:8005"
+                                             ],
+                          "pg_user":  "kong",
+                          "enabled_headers_upstream":  {
+                                                           "X-Kong-Request-Id":  true
+                                                       },
+                          "headers_upstream":  [
+                                                   "x-kong-request-id"
+                                               ],
+                          "ssl_dhparam":  "ffdhe2048",
+                          "nginx_main_directives":  [
+                                                        {
+                                                            "value":  "off",
+                                                            "name":  "daemon"
+                                                        },
+                                                        {
+                                                            "value":  "kong kong",
+                                                            "name":  "user"
+                                                        },
+                                                        {
+                                                            "value":  "auto",
+                                                            "name":  "worker_processes"
+                                                        },
+                                                        {
+                                                            "value":  "auto",
+                                                            "name":  "worker_rlimit_nofile"
+                                                        }
+                                                    ],
+                          "admin_gui_url":  {
+
+                                            },
+                          "error_default_type":  "text/plain",
+                          "cluster_use_proxy":  false,
+                          "lua_max_req_headers":  100,
+                          "lua_ssl_protocols":  "TLSv1.2 TLSv1.3",
+                          "nginx_upstream_directives":  {
+
+                                                        },
+                          "nginx_proxy_directives":  [
+                                                         {
+                                                             "value":  "X-Real-IP",
+                                                             "name":  "real_ip_header"
+                                                         },
+                                                         {
+                                                             "value":  "off",
+                                                             "name":  "real_ip_recursive"
+                                                         }
+                                                     ],
+                          "cluster_rpc":  false,
+                          "nginx_location_directives":  {
+
+                                                        },
+                          "nginx_status_directives":  {
+
+                                                      },
+                          "cluster_incremental_sync":  false,
+                          "pluginservers":  {
+
+                                            },
+                          "enabled_headers":  {
+                                                  "latency_tokens":  true,
+                                                  "X-Kong-Proxy-Latency":  true,
+                                                  "X-Kong-Request-Id":  true,
+                                                  "X-Kong-Response-Latency":  true,
+                                                  "Via":  true,
+                                                  "Server":  true,
+                                                  "X-Kong-Upstream-Latency":  true,
+                                                  "X-Kong-Upstream-Status":  false,
+                                                  "X-Kong-Admin-Latency":  true,
+                                                  "server_tokens":  true
+                                              },
+                          "vaults":  [
+                                         "bundled"
+                                     ],
+                          "nginx_http_client_body_buffer_size":  "8k",
+                          "lua_max_post_args":  100,
+                          "status_ssl_enabled":  false,
+                          "nginx_wasm_wasmtime_directives":  {
+
+                                                             },
+                          "admin_gui_ssl_enabled":  true,
+                          "nginx_wasm_v8_directives":  {
+
+                                                       },
+                          "proxy_listeners":  [
+                                                  {
+                                                      "ssl":  false,
+                                                      "port":  8000,
+                                                      "bind":  false,
+                                                      "listener":  "0.0.0.0:8000",
+                                                      "http2":  false,
+                                                      "proxy_protocol":  false,
+                                                      "deferred":  false,
+                                                      "reuseport":  false,
+                                                      "backlog=%d+":  false,
+                                                      "ipv6only=on":  false,
+                                                      "ipv6only=off":  false,
+                                                      "so_keepalive=on":  false,
+                                                      "so_keepalive=off":  false,
+                                                      "so_keepalive=%w*:%w*:%d*":  false,
+                                                      "ip":  "0.0.0.0"
+                                                  }
+                                              ],
+                          "nginx_wasm_wasmer_directives":  {
+
+                                                           },
+                          "status_listeners":  [
+                                                   {
+                                                       "ssl":  false,
+                                                       "port":  8007,
+                                                       "bind":  false,
+                                                       "listener":  "127.0.0.1:8007 reuseport backlog=16384",
+                                                       "http2":  false,
+                                                       "proxy_protocol":  false,
+                                                       "deferred":  false,
+                                                       "reuseport":  true,
+                                                       "ip":  "127.0.0.1",
+                                                       "ipv6only=on":  false,
+                                                       "ipv6only=off":  false,
+                                                       "so_keepalive=on":  false,
+                                                       "so_keepalive=off":  false,
+                                                       "so_keepalive=%w*:%w*:%d*":  false,
+                                                       "backlog=16384":  true
+                                                   }
+                                               ],
+                          "status_error_log":  "logs/status_error.log",
+                          "nginx_http_lua_ssl_protocols":  "TLSv1.2 TLSv1.3",
+                          "nginx_stream_lua_ssl_protocols":  "TLSv1.2 TLSv1.3",
+                          "lua_socket_pool_size":  256,
+                          "cluster_control_plane":  "127.0.0.1:8005",
+                          "nginx_err_logs":  "/usr/local/kong/logs/error.log",
+                          "nginx_stream_directives":  [
+                                                          {
+                                                              "value":  "stream_prometheus_metrics 5m",
+                                                              "name":  "lua_shared_dict"
+                                                          },
+                                                          {
+                                                              "value":  "off",
+                                                              "name":  "ssl_prefer_server_ciphers"
+                                                          },
+                                                          {
+                                                              "value":  "TLSv1.2 TLSv1.3",
+                                                              "name":  "ssl_protocols"
+                                                          },
+                                                          {
+                                                              "value":  "on",
+                                                              "name":  "ssl_session_tickets"
+                                                          },
+                                                          {
+                                                              "value":  "1d",
+                                                              "name":  "ssl_session_timeout"
+                                                          }
+                                                      ],
+                          "cluster_mtls":  "shared",
+                          "nginx_acc_logs":  "/usr/local/kong/logs/access.log",
+                          "dedicated_config_processing":  true,
+                          "cluster_data_plane_purge_delay":  1209600,
+                          "request_debug":  true,
+                          "cluster_max_payload":  16777216,
+                          "cluster_dp_labels":  {
+
+                                                },
+                          "cluster_cjson":  false,
+                          "untrusted_lua":  "sandbox",
+                          "nginx_kong_conf":  "/usr/local/kong/nginx-kong.conf",
+                          "untrusted_lua_sandbox_requires":  {
+
+                                                             },
+                          "untrusted_lua_sandbox_environment":  {
+
+                                                                },
+                          "lmdb_environment_path":  "dbless.lmdb",
+                          "lmdb_map_size":  "2048m",
+                          "opentelemetry_tracing":  [
+                                                        "off"
+                                                    ],
+                          "opentelemetry_tracing_sampling_rate":  0.01,
+                          "proxy_server_ssl_verify":  true,
+                          "log_level":  "info",
+                          "admin_listeners":  [
+                                                  {
+                                                      "ssl":  false,
+                                                      "port":  8001,
+                                                      "bind":  false,
+                                                      "listener":  "0.0.0.0:8001",
+                                                      "http2":  false,
+                                                      "proxy_protocol":  false,
+                                                      "deferred":  false,
+                                                      "reuseport":  false,
+                                                      "backlog=%d+":  false,
+                                                      "ipv6only=on":  false,
+                                                      "ipv6only=off":  false,
+                                                      "so_keepalive=on":  false,
+                                                      "so_keepalive=off":  false,
+                                                      "so_keepalive=%w*:%w*:%d*":  false,
+                                                      "ip":  "0.0.0.0"
+                                                  }
+                                              ],
+                          "stream_listeners":  {
+
+                                               },
+                          "ssl_cert_csr_default":  "/usr/local/kong/ssl/kong-default.csr",
+                          "proxy_ssl_enabled":  false,
+                          "ssl_cert_default":  "/usr/local/kong/ssl/kong-default.crt",
+                          "loaded_plugins":  {
+                                                 "pre-function":  true,
+                                                 "post-function":  true,
+                                                 "azure-functions":  true,
+                                                 "zipkin":  true,
+                                                 "opentelemetry":  true,
+                                                 "ai-proxy":  true,
+                                                 "ai-prompt-decorator":  true,
+                                                 "ai-prompt-template":  true,
+                                                 "ai-prompt-guard":  true,
+                                                 "ai-request-transformer":  true,
+                                                 "ai-response-transformer":  true,
+                                                 "standard-webhooks":  true,
+                                                 "jwt":  true,
+                                                 "acl":  true,
+                                                 "correlation-id":  true,
+                                                 "cors":  true,
+                                                 "oauth2":  true,
+                                                 "tcp-log":  true,
+                                                 "udp-log":  true,
+                                                 "file-log":  true,
+                                                 "http-log":  true,
+                                                 "key-auth":  true,
+                                                 "hmac-auth":  true,
+                                                 "basic-auth":  true,
+                                                 "ip-restriction":  true,
+                                                 "request-transformer":  true,
+                                                 "acme":  true,
+                                                 "response-transformer":  true,
+                                                 "request-size-limiting":  true,
+                                                 "rate-limiting":  true,
+                                                 "response-ratelimiting":  true,
+                                                 "syslog":  true,
+                                                 "loggly":  true,
+                                                 "datadog":  true,
+                                                 "ldap-auth":  true,
+                                                 "statsd":  true,
+                                                 "bot-detection":  true,
+                                                 "aws-lambda":  true,
+                                                 "request-termination":  true,
+                                                 "prometheus":  true,
+                                                 "proxy-cache":  true,
+                                                 "session":  true,
+                                                 "redirect":  true,
+                                                 "grpc-gateway":  true,
+                                                 "grpc-web":  true
+                                             },
+                          "ssl_cert_key_default":  "/usr/local/kong/ssl/kong-default.key",
+                          "nginx_wasm_main_directives":  {
+
+                                                         },
+                          "ssl_cert_default_ecdsa":  "/usr/local/kong/ssl/kong-default-ecdsa.crt",
+                          "nginx_wasm_main_shm_kv_directives":  {
+
+                                                                },
+                          "ssl_cert_key_default_ecdsa":  "/usr/local/kong/ssl/kong-default-ecdsa.key",
+                          "nginx_sproxy_directives":  {
+
+                                                      },
+                          "client_ssl_cert_default":  "/usr/local/kong/ssl/kong-default.crt",
+                          "client_ssl_cert_key_default":  "/usr/local/kong/ssl/kong-default.key",
+                          "admin_ssl_cert_default":  "/usr/local/kong/ssl/admin-kong-default.crt",
+                          "nginx_supstream_directives":  {
+
+                                                         },
+                          "admin_ssl_cert_key_default":  "/usr/local/kong/ssl/admin-kong-default.key",
+                          "admin_gui_listeners":  [
+                                                      {
+                                                          "ssl":  false,
+                                                          "port":  8002,
+                                                          "bind":  false,
+                                                          "listener":  "0.0.0.0:8002",
+                                                          "http2":  false,
+                                                          "proxy_protocol":  false,
+                                                          "deferred":  false,
+                                                          "reuseport":  false,
+                                                          "backlog=%d+":  false,
+                                                          "ipv6only=on":  false,
+                                                          "ipv6only=off":  false,
+                                                          "so_keepalive=on":  false,
+                                                          "so_keepalive=off":  false,
+                                                          "so_keepalive=%w*:%w*:%d*":  false,
+                                                          "ip":  "0.0.0.0"
+                                                      },
+                                                      {
+                                                          "ssl":  true,
+                                                          "port":  8445,
+                                                          "bind":  false,
+                                                          "listener":  "0.0.0.0:8445 ssl",
+                                                          "http2":  false,
+                                                          "proxy_protocol":  false,
+                                                          "deferred":  false,
+                                                          "reuseport":  false,
+                                                          "backlog=%d+":  false,
+                                                          "ipv6only=on":  false,
+                                                          "ipv6only=off":  false,
+                                                          "so_keepalive=on":  false,
+                                                          "so_keepalive=off":  false,
+                                                          "so_keepalive=%w*:%w*:%d*":  false,
+                                                          "ip":  "0.0.0.0"
+                                                      }
+                                                  ],
+                          "admin_ssl_cert_default_ecdsa":  "/usr/local/kong/ssl/admin-kong-default-ecdsa.crt",
+                          "nginx_admin_directives":  [
+                                                         {
+                                                             "value":  "10m",
+                                                             "name":  "client_body_buffer_size"
+                                                         },
+                                                         {
+                                                             "value":  "10m",
+                                                             "name":  "client_max_body_size"
+                                                         }
+                                                     ],
+                          "admin_ssl_cert_key_default_ecdsa":  "/usr/local/kong/ssl/admin-kong-default-ecdsa.key",
+                          "status_ssl_cert_key":  "******",
+                          "admin_gui_ssl_cert_default":  "/usr/local/kong/ssl/admin-gui-kong-default.crt",
+                          "nginx_events_directives":  [
+                                                          {
+                                                              "value":  "on",
+                                                              "name":  "multi_accept"
+                                                          },
+                                                          {
+                                                              "value":  "auto",
+                                                              "name":  "worker_connections"
+                                                          }
+                                                      ],
+                          "admin_gui_ssl_cert_key_default":  "/usr/local/kong/ssl/admin-gui-kong-default.key",
+                          "lmdb_validation_tag":  "3.9",
+                          "admin_gui_ssl_cert_default_ecdsa":  "/usr/local/kong/ssl/admin-gui-kong-default-ecdsa.crt",
+                          "loaded_vaults":  {
+                                                "env":  true
+                                            },
+                          "nginx_pid":  "/usr/local/kong/pids/nginx.pid",
+                          "kong_env":  "/usr/local/kong/.kong_env",
+                          "status_ssl_cert_key_default":  "/usr/local/kong/ssl/status-kong-default.key",
+                          "nginx_kong_stream_inject_conf":  "/usr/local/kong/nginx-kong-stream-inject.conf",
+                          "status_ssl_cert_default_ecdsa":  "/usr/local/kong/ssl/status-kong-default-ecdsa.crt",
+                          "nginx_kong_inject_conf":  "/usr/local/kong/nginx-kong-inject.conf",
+                          "status_ssl_cert_key_default_ecdsa":  "/usr/local/kong/ssl/status-kong-default-ecdsa.key",
+                          "nginx_inject_conf":  "/usr/local/kong/nginx-inject.conf",
+                          "ssl_cipher_suite":  "intermediate",
+                          "nginx_kong_stream_conf":  "/usr/local/kong/nginx-kong-stream.conf",
+                          "nginx_kong_gui_include_conf":  "/usr/local/kong/nginx-kong-gui-include.conf",
+                          "ssl_ciphers":  "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305",
+                          "wasm":  false,
+                          "nginx_conf":  "/usr/local/kong/nginx.conf",
+                          "admin_acc_logs":  "/usr/local/kong/logs/admin_access.log",
+                          "pg_timeout":  5000,
+                          "client_ssl":  false,
+                          "role":  "traditional",
+                          "pg_host":  "127.0.0.1",
+                          "dns_resolver":  {
+
+                                           },
+                          "database":  "off",
+                          "anonymous_reports":  true,
+                          "stream_tls_passthrough_sock":  "sp",
+                          "router_flavor":  "traditional_compatible",
+                          "lua_package_path":  "./?.lua;./?/init.lua;",
+                          "stream_rpc_sock":  "rp",
+                          "db_cache_ttl":  0,
+                          "ssl_cert":  {
+
+                                       },
+                          "worker_events_sock":  "we",
+                          "tracing_instrumentations":  [
+                                                           "off"
+                                                       ],
+                          "admin_gui_error_log":  "logs/admin_gui_error.log",
+                          "dns_error_ttl":  1,
+                          "client_body_buffer_size":  "8k",
+                          "dns_not_found_ttl":  30,
+                          "lua_package_cpath":  "",
+                          "upstream_keepalive_pool_size":  512,
+                          "worker_consistency":  "eventual",
+                          "dns_cache_size":  10000,
+                          "kong_process_secrets":  "/usr/local/kong/.kong_process_secrets",
+                          "dns_order":  [
+                                            "LAST",
+                                            "SRV",
+                                            "A",
+                                            "CNAME"
+                                        ],
+                          "dns_hostsfile":  "/etc/hosts",
+                          "dns_no_sync":  false,
+                          "dns_stale_ttl":  3600,
+                          "nginx_main_worker_rlimit_nofile":  "auto",
+                          "resolver_address":  {
+
+                                               },
+                          "resolver_hosts_file":  "/etc/hosts",
+                          "declarative_config":  "/usr/local/kong/declarative/kong.yml",
+                          "resolver_family":  [
+                                                  "A",
+                                                  "SRV"
+                                              ],
+                          "tracing_sampling_rate":  0.01,
+                          "upstream_keepalive_idle_timeout":  60,
+                          "upstream_keepalive_max_requests":  10000,
+                          "resolver_error_ttl":  1,
+                          "stream_worker_events_sock":  "sw",
+                          "resolver_stale_ttl":  3600,
+                          "stream_config_sock":  "sc",
+                          "resolver_lru_cache_size":  10000,
+                          "stream_tls_terminate_sock":  "st",
+                          "cluster_proxy_ssl_terminator_sock":  "cp",
+                          "lua_ssl_trusted_certificate":  [
+                                                              "/etc/ssl/certs/ca-certificates.crt"
+                                                          ],
+                          "lua_ssl_trusted_certificate_combined":  "/usr/local/kong/.ca_combined",
+                          "port_maps":  {
+
+                                        },
+                          "admin_ssl_cert":  {
+
+                                             },
+                          "admin_ssl_cert_key":  "******",
+                          "admin_gui_ssl_cert":  [
+                                                     "/usr/local/kong/ssl/admin-gui-kong-default.crt",
+                                                     "/usr/local/kong/ssl/admin-gui-kong-default-ecdsa.crt"
+                                                 ],
+                          "plugins":  [
+                                          "bundled"
+                                      ],
+                          "status_ssl_cert":  {
+
+                                              },
+                          "nginx_main_user":  "kong kong",
+                          "db_resurrect_ttl":  30,
+                          "nginx_daemon":  "off",
+                          "ssl_session_cache_size":  "10m",
+                          "nginx_main_daemon":  "off",
+                          "nginx_worker_processes":  "auto",
+                          "nginx_main_worker_processes":  "auto",
+                          "ssl_cert_key":  "******",
+                          "trusted_ips":  {
+
+                                          },
+                          "mem_cache_size":  "128m",
+                          "nginx_proxy_real_ip_header":  "X-Real-IP",
+                          "real_ip_recursive":  "off",
+                          "nginx_proxy_real_ip_recursive":  "off",
+                          "cluster_ocsp":  "off",
+                          "pg_port":  5432,
+                          "pg_ssl":  false,
+                          "pg_ssl_verify":  false,
+                          "pg_max_concurrent_queries":  0,
+                          "pg_semaphore_timeout":  60000,
+                          "socket_path":  "/usr/local/kong/sockets",
+                          "kic":  false,
+                          "new_dns_client":  false,
+                          "worker_events_max_payload":  65535,
+                          "admin_access_log":  "/dev/stdout",
+                          "headers":  [
+                                          "server_tokens",
+                                          "latency_tokens",
+                                          "x-kong-request-id"
+                                      ],
+                          "nginx_http_ssl_prefer_server_ciphers":  "off",
+                          "pg_ro_ssl":  false,
+                          "pg_ro_ssl_verify":  false,
+                          "nginx_http_client_max_body_size":  "0",
+                          "host_ports":  {
+
+                                         },
+                          "cluster_listeners":  [
+                                                    {
+                                                        "ssl":  false,
+                                                        "port":  8005,
+                                                        "bind":  false,
+                                                        "listener":  "0.0.0.0:8005",
+                                                        "http2":  false,
+                                                        "proxy_protocol":  false,
+                                                        "deferred":  false,
+                                                        "reuseport":  false,
+                                                        "backlog=%d+":  false,
+                                                        "ipv6only=on":  false,
+                                                        "ipv6only=off":  false,
+                                                        "so_keepalive=on":  false,
+                                                        "so_keepalive=off":  false,
+                                                        "so_keepalive=%w*:%w*:%d*":  false,
+                                                        "ip":  "0.0.0.0"
+                                                    }
+                                                ],
+                          "db_update_frequency":  5,
+                          "db_cache_warmup_entities":  [
+                                                           "services"
+                                                       ],
+                          "db_update_propagation":  0,
+                          "admin_gui_path":  "/",
+                          "nginx_events_worker_connections":  "auto",
+                          "ssl_protocols":  "TLSv1.2 TLSv1.3",
+                          "nginx_http_ssl_protocols":  "TLSv1.2 TLSv1.3",
+                          "nginx_stream_ssl_protocols":  "TLSv1.2 TLSv1.3",
+                          "ssl_prefer_server_ciphers":  "on",
+                          "lua_ssl_verify_depth":  1,
+                          "nginx_stream_ssl_prefer_server_ciphers":  "off",
+                          "nginx_http_ssl_dhparam":  "ffdhe2048",
+                          "nginx_stream_ssl_dhparam":  "ffdhe2048",
+                          "ssl_session_tickets":  "on",
+                          "nginx_http_ssl_session_tickets":  "on",
+                          "nginx_stream_ssl_session_tickets":  "on",
+                          "ssl_session_timeout":  "1d",
+                          "nginx_http_ssl_session_timeout":  "1d",
+                          "nginx_stream_ssl_session_timeout":  "1d",
+                          "worker_state_update_frequency":  5,
+                          "proxy_access_log":  "/dev/stdout",
+                          "proxy_error_log":  "/dev/stderr",
+                          "proxy_stream_access_log":  "logs/access.log basic",
+                          "proxy_stream_error_log":  "logs/error.log",
+                          "nginx_http_lua_regex_match_limit":  "100000",
+                          "admin_error_log":  "/dev/stderr",
+                          "admin_gui_access_log":  "logs/admin_gui_access.log",
+                          "nginx_http_lua_regex_cache_max_entries":  "8192",
+                          "status_access_log":  "off",
+                          "pg_database":  "kong",
+                          "nginx_http_keepalive_requests":  "10000",
+                          "lua_max_uri_args":  100,
+                          "lua_max_resp_headers":  100,
+                          "pluginserver_names":  {
+
+                                                 },
+                          "real_ip_header":  "X-Real-IP",
+                          "wasm_filters":  [
+                                               "bundled",
+                                               "user"
+                                           ],
+                          "nginx_user":  "kong kong",
+                          "_debug_pg_ttl_cleanup_interval":  300,
+                          "nginx_http_charset":  "UTF-8",
+                          "resolver_mem_cache_size":  "5m",
+                          "admin_gui_ssl_cert_key":  "******",
+                          "nginx_http_directives":  [
+                                                        {
+                                                            "value":  "UTF-8",
+                                                            "name":  "charset"
+                                                        },
+                                                        {
+                                                            "value":  "8k",
+                                                            "name":  "client_body_buffer_size"
+                                                        },
+                                                        {
+                                                            "value":  "0",
+                                                            "name":  "client_max_body_size"
+                                                        },
+                                                        {
+                                                            "value":  "10000",
+                                                            "name":  "keepalive_requests"
+                                                        },
+                                                        {
+                                                            "value":  "8192",
+                                                            "name":  "lua_regex_cache_max_entries"
+                                                        },
+                                                        {
+                                                            "value":  "100000",
+                                                            "name":  "lua_regex_match_limit"
+                                                        },
+                                                        {
+                                                            "value":  "prometheus_metrics 5m",
+                                                            "name":  "lua_shared_dict"
+                                                        },
+                                                        {
+                                                            "value":  "off",
+                                                            "name":  "ssl_prefer_server_ciphers"
+                                                        },
+                                                        {
+                                                            "value":  "TLSv1.2 TLSv1.3",
+                                                            "name":  "ssl_protocols"
+                                                        },
+                                                        {
+                                                            "value":  "on",
+                                                            "name":  "ssl_session_tickets"
+                                                        },
+                                                        {
+                                                            "value":  "1d",
+                                                            "name":  "ssl_session_timeout"
+                                                        }
+                                                    ],
+                          "nginx_events_multi_accept":  "on",
+                          "nginx_admin_client_max_body_size":  "10m",
+                          "allow_debug_header":  false,
+                          "nginx_admin_client_body_buffer_size":  "10m"
+                      },
+    "edition":  "community",
+    "node_id":  "f395566e-090a-4c40-bc3c-bbf3db2a0fa4",
+    "version":  "3.9.5",
+    "timers":  {
+                   "pending":  1,
+                   "running":  257
+               },
+    "lua_version":  "LuaJIT 2.1.0-20231117.1"
+}

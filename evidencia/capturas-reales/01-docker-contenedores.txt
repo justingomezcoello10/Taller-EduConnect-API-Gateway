@@ -1,0 +1,6 @@
+﻿NAME                      IMAGE                             STATUS                    PORTS
+educonnect-certificados   educonnect-gateway-certificados   Up 2 hours (healthy)      3001/tcp, 3004/tcp
+educonnect-estudiantes    educonnect-gateway-estudiantes    Up 2 hours (healthy)      3001/tcp
+educonnect-kong           kong:3.9.5                        Up 32 minutes (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp, 127.0.0.1:8001->8001/tcp
+educonnect-matriculas     educonnect-gateway-matriculas     Up 2 hours (healthy)      3001-3002/tcp
+educonnect-pagos          educonnect-gateway-pagos          Up 32 minutes (healthy)   3001/tcp, 3003/tcp
