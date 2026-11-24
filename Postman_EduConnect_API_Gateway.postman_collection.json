@@ -52,4 +52,4 @@
       "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{certKey}}" }], "url": "{{baseUrl}}/api/certificados" }
     }
   ]
-}}}}
+}
