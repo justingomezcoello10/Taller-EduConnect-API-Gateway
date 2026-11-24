@@ -1,0 +1,20 @@
+# Dependencias y artefactos locales
+node_modules/
+npm-debug.log*
+*.log
+
+# Salidas temporales de pruebas
+evidencia/tmp/
+evidencia/*.tmp
+newman/
+
+# Sistema operativo / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Secretos locales (nunca se versionan)
+.env
+.env.*
+!.env.example

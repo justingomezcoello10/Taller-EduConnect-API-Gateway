@@ -1,0 +1,11 @@
+{
+  "caso": "Reto 4 - Backend no disponible",
+  "fechaEjecucion": "2026-11-24T18:11:59.216205+00:00",
+  "accion": "docker compose stop pagos",
+  "solicitud": "GET /api/pagos con API Key válida",
+  "estadoConBackendDetenido": 500,
+  "cuerpoConBackendDetenido": "An unexpected error occurred\nrequest_id: ca22095376b4dc62051b8b385e424956\n",
+  "estadoTrasRecuperacion": 503,
+  "aprobado": false,
+  "estadoTrasRecuperacionTrasHealthcheck": 429
+}

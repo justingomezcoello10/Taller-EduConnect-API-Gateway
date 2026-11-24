@@ -1,0 +1,130 @@
+name: educonnect-gateway
+
+# ---------------------------------------------------------------------------
+# EduConnect - PoC API Gateway (Kong 3.9.5 en modo DB-less)
+# Grupo 3 - Taller EduConnect API Gateway
+#
+# Arquitectura:
+#   Cliente -> Kong :8000 -> red interna educonnect-net -> mocks :3001-:3004
+#
+# Los mocks NO publican puertos al host: solo Kong puede alcanzarlos dentro
+# de la red de Docker, resolviéndolos por nombre de servicio (DNS interno).
+# ---------------------------------------------------------------------------
+
+services:
+  kong:
+    image: kong:3.9.5
+    container_name: educonnect-kong
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
+      KONG_PROXY_LISTEN: "0.0.0.0:8000"
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001"
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_LOG_LEVEL: info
+      KONG_PLUGINS: bundled
+    volumes:
+      - ./kong/kong.yml:/usr/local/kong/declarative/kong.yml:ro
+    ports:
+      # Proxy público de la PoC (único punto de entrada de los consumidores)
+      - "8000:8000"
+      # Admin API solo en loopback del host, para inspección/diagnóstico
+      - "127.0.0.1:8001:8001"
+    depends_on:
+      estudiantes:
+        condition: service_healthy
+      matriculas:
+        condition: service_healthy
+      pagos:
+        condition: service_healthy
+      certificados:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - educonnect-net
+    restart: unless-stopped
+
+  estudiantes:
+    build:
+      context: ./mocks
+    container_name: educonnect-estudiantes
+    environment:
+      SERVICE_NAME: estudiantes
+      PORT: "3001"
+    expose:
+      - "3001"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3001/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - educonnect-net
+    restart: unless-stopped
+
+  matriculas:
+    build:
+      context: ./mocks
+    container_name: educonnect-matriculas
+    environment:
+      SERVICE_NAME: matriculas
+      PORT: "3002"
+    expose:
+      - "3002"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3002/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - educonnect-net
+    restart: unless-stopped
+
+  pagos:
+    build:
+      context: ./mocks
+    container_name: educonnect-pagos
+    environment:
+      SERVICE_NAME: pagos
+      PORT: "3003"
+    expose:
+      - "3003"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3003/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - educonnect-net
+    restart: unless-stopped
+
+  certificados:
+    build:
+      context: ./mocks
+    container_name: educonnect-certificados
+    environment:
+      SERVICE_NAME: certificados
+      PORT: "3004"
+    expose:
+      - "3004"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3004/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - educonnect-net
+    restart: unless-stopped
+
+networks:
+  educonnect-net:
+    name: educonnect-net
+    driver: bridge

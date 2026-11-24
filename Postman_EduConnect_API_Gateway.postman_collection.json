@@ -1,0 +1,55 @@
+{
+  "info": {
+    "name": "EduConnect API Gateway - Grupo 3",
+    "description": "Colección reproducible para Kong 3.9.5: rutas, API Key, rate limiting y backend no disponible.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" },
+    { "key": "apiKey", "value": "educonnect-poc-key-2026" },
+    { "key": "rateKey", "value": "educonnect-rate-key-2026" },
+    { "key": "certKey", "value": "educonnect-cert-key-2026" }
+  ],
+  "item": [
+    {
+      "name": "Estudiantes - positiva",
+      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{apiKey}}" }], "url": "{{baseUrl}}/api/estudiantes" }
+    },
+    {
+      "name": "Matriculas - positiva",
+      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{apiKey}}" }], "url": "{{baseUrl}}/api/matriculas" }
+    },
+    {
+      "name": "Pagos - positiva",
+      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{apiKey}}" }], "url": "{{baseUrl}}/api/pagos" }
+    },
+    {
+      "name": "Sin API Key - 401",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/estudiantes" }
+    },
+    {
+      "name": "API Key incorrecta - 401",
+      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "clave-invalida-de-prueba" }], "url": "{{baseUrl}}/api/estudiantes" }
+    },
+    {
+      "name": "Ruta no registrada - 404",
+      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{apiKey}}" }], "url": "{{baseUrl}}/api/desconocido" }
+    },
+    {
+      "name": "Rate limit Pagos - ejecutar 6 veces",
+      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{rateKey}}" }], "url": "{{baseUrl}}/api/pagos" }
+    },
+    {
+      "name": "Certificados - positiva",
+      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{apiKey}}" }], "url": "{{baseUrl}}/api/certificados" }
+    },
+    {
+      "name": "Certificados sin API Key - 401",
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/certificados" }
+    },
+    {
+      "name": "Rate limit Certificados - ejecutar 3 veces",
+      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{certKey}}" }], "url": "{{baseUrl}}/api/certificados" }
+    }
+  ]
+}}}}

@@ -1,0 +1,462 @@
+{
+  "proyecto": "EduConnect API Gateway - Grupo 3",
+  "gateway": "http://localhost:8000",
+  "versionKong": "3.9.5",
+  "fechaEjecucion": "2026-11-24T17:35:26.229429+00:00",
+  "totalCasos": 11,
+  "casosAprobados": 11,
+  "casosFallidos": 0,
+  "resultados": [
+    {
+      "caso": "Reto 1 - GET /api/estudiantes con API Key válida",
+      "solicitud": "GET /api/estudiantes",
+      "apiKey": "educonnect-poc-key-2026",
+      "esperado": [
+        200
+      ],
+      "observado": 200,
+      "aprobado": true,
+      "nota": "Debe responder el mock estudiantes",
+      "respuesta": {
+        "url": "http://localhost:8000/api/estudiantes",
+        "metodo": "GET",
+        "apiKeyEnviada": "educonnect-poc-key-2026",
+        "estado": 200,
+        "duracionMs": 4441.4,
+        "cabeceras": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Service": "estudiantes",
+          "Server": "kong/3.9.5",
+          "X-Kong-Request-Id": "9b0e921361e77454a9846768e05b8a71",
+          "HTTP-Status": 200
+        },
+        "cuerpo": {
+          "id": 101,
+          "nombre": "Ana Perez",
+          "carrera": "Ingenieria de Software",
+          "servicio": "estudiantes"
+        },
+        "timestamp": "2026-11-24T17:35:11.614420+00:00"
+      },
+      "servicioEsperado": "estudiantes",
+      "servicioObservado": "estudiantes"
+    },
+    {
+      "caso": "Reto 1 - GET /api/matriculas con API Key válida",
+      "solicitud": "GET /api/matriculas",
+      "apiKey": "educonnect-poc-key-2026",
+      "esperado": [
+        200
+      ],
+      "observado": 200,
+      "aprobado": true,
+      "nota": "Debe responder el mock matriculas",
+      "respuesta": {
+        "url": "http://localhost:8000/api/matriculas",
+        "metodo": "GET",
+        "apiKeyEnviada": "educonnect-poc-key-2026",
+        "estado": 200,
+        "duracionMs": 4028.4,
+        "cabeceras": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Service": "matriculas",
+          "Server": "kong/3.9.5",
+          "X-Kong-Request-Id": "6d51660bc49d106ca92e395ae869502c",
+          "HTTP-Status": 200
+        },
+        "cuerpo": {
+          "id": 501,
+          "estudianteId": 101,
+          "periodo": "2026-1",
+          "estado": "ACTIVA",
+          "servicio": "matriculas"
+        },
+        "timestamp": "2026-11-24T17:35:15.644545+00:00"
+      },
+      "servicioEsperado": "matriculas",
+      "servicioObservado": "matriculas"
+    },
+    {
+      "caso": "Reto 1 - GET /api/pagos con API Key válida",
+      "solicitud": "GET /api/pagos",
+      "apiKey": "educonnect-poc-key-2026",
+      "esperado": [
+        200
+      ],
+      "observado": 200,
+      "aprobado": true,
+      "nota": "Debe responder el mock pagos",
+      "respuesta": {
+        "url": "http://localhost:8000/api/pagos",
+        "metodo": "GET",
+        "apiKeyEnviada": "educonnect-poc-key-2026",
+        "estado": 200,
+        "duracionMs": 4018.1,
+        "cabeceras": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Service": "pagos",
+          "Server": "kong/3.9.5",
+          "X-Kong-Request-Id": "0073e4248bbf80143baf7d33c6f00a42",
+          "HTTP-Status": 200
+        },
+        "cuerpo": {
+          "id": 701,
+          "matriculaId": 501,
+          "valor": 150,
+          "moneda": "USD",
+          "estado": "PENDIENTE",
+          "servicio": "pagos"
+        },
+        "timestamp": "2026-11-24T17:35:19.661843+00:00"
+      },
+      "servicioEsperado": "pagos",
+      "servicioObservado": "pagos"
+    },
+    {
+      "caso": "Reto 2 - Sin API Key",
+      "solicitud": "GET /api/estudiantes",
+      "apiKey": "(sin cabecera apikey)",
+      "esperado": [
+        401
+      ],
+      "observado": 401,
+      "aprobado": true,
+      "nota": "Kong debe rechazar la solicitud",
+      "respuesta": {
+        "url": "http://localhost:8000/api/estudiantes",
+        "metodo": "GET",
+        "apiKeyEnviada": null,
+        "estado": 401,
+        "duracionMs": 8.1,
+        "cabeceras": {
+          "Content-Type": "application/json; charset=utf-8",
+          "WWW-Authenticate": "Key",
+          "X-Kong-Response-Latency": "1",
+          "Server": "kong/3.9.5",
+          "X-Kong-Request-Id": "9d291252b935c150d502494f91a1c45d",
+          "HTTP-Status": 401
+        },
+        "cuerpo": {
+          "message": "No API key found in request",
+          "request_id": "9d291252b935c150d502494f91a1c45d"
+        },
+        "timestamp": "2026-11-24T17:35:19.666948+00:00"
+      }
+    },
+    {
+      "caso": "Reto 2 - API Key incorrecta",
+      "solicitud": "GET /api/estudiantes",
+      "apiKey": "clave-invalida-de-prueba",
+      "esperado": [
+        401
+      ],
+      "observado": 401,
+      "aprobado": true,
+      "nota": "Credencial inexistente",
+      "respuesta": {
+        "url": "http://localhost:8000/api/estudiantes",
+        "metodo": "GET",
+        "apiKeyEnviada": "clave-invalida-de-prueba",
+        "estado": 401,
+        "duracionMs": 10.3,
+        "cabeceras": {
+          "Content-Type": "application/json; charset=utf-8",
+          "WWW-Authenticate": "Key",
+          "X-Kong-Response-Latency": "2",
+          "Server": "kong/3.9.5",
+          "X-Kong-Request-Id": "3c8360401a90ba58c9b07c0f03ef2514",
+          "HTTP-Status": 401
+        },
+        "cuerpo": {
+          "message": "Unauthorized",
+          "request_id": "3c8360401a90ba58c9b07c0f03ef2514"
+        },
+        "timestamp": "2026-11-24T17:35:19.681325+00:00"
+      }
+    },
+    {
+      "caso": "Reto 2 - API Key válida",
+      "solicitud": "GET /api/estudiantes",
+      "apiKey": "educonnect-poc-key-2026",
+      "esperado": [
+        200
+      ],
+      "observado": 200,
+      "aprobado": true,
+      "nota": "Credencial registrada",
+      "respuesta": {
+        "url": "http://localhost:8000/api/estudiantes",
+        "metodo": "GET",
+        "apiKeyEnviada": "educonnect-poc-key-2026",
+        "estado": 200,
+        "duracionMs": 18.2,
+        "cabeceras": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Service": "estudiantes",
+          "Server": "kong/3.9.5",
+          "X-Kong-Request-Id": "eb54b538b5c5962bfdda056403afa70f",
+          "HTTP-Status": 200
+        },
+        "cuerpo": {
+          "id": 101,
+          "nombre": "Ana Perez",
+          "carrera": "Ingenieria de Software",
+          "servicio": "estudiantes"
+        },
+        "timestamp": "2026-11-24T17:35:19.697959+00:00"
+      }
+    },
+    {
+      "caso": "Reto 4 - Ruta no registrada",
+      "solicitud": "GET /api/desconocido",
+      "apiKey": "educonnect-poc-key-2026",
+      "esperado": [
+        404
+      ],
+      "observado": 404,
+      "aprobado": true,
+      "nota": "Kong no encuentra Route coincidente",
+      "respuesta": {
+        "url": "http://localhost:8000/api/desconocido",
+        "metodo": "GET",
+        "apiKeyEnviada": "educonnect-poc-key-2026",
+        "estado": 404,
+        "duracionMs": 6.5,
+        "cabeceras": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Kong-Response-Latency": "0",
+          "Server": "kong/3.9.5",
+          "X-Kong-Request-Id": "4a89f125fef3c05eeafabc7ed01b9757",
+          "HTTP-Status": 404
+        },
+        "cuerpo": {
+          "message": "no Route matched with those values",
+          "request_id": "4a89f125fef3c05eeafabc7ed01b9757"
+        },
+        "timestamp": "2026-11-24T17:35:19.705494+00:00"
+      }
+    },
+    {
+      "caso": "Certificados - API Key válida",
+      "solicitud": "GET /api/certificados",
+      "apiKey": "educonnect-poc-key-2026",
+      "esperado": [
+        200
+      ],
+      "observado": 200,
+      "aprobado": true,
+      "nota": "Cuarto mock expuesto y protegido",
+      "respuesta": {
+        "url": "http://localhost:8000/api/certificados",
+        "metodo": "GET",
+        "apiKeyEnviada": "educonnect-poc-key-2026",
+        "estado": 200,
+        "duracionMs": 4025.0,
+        "cabeceras": {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-Service": "certificados",
+          "Server": "kong/3.9.5",
+          "X-Kong-Request-Id": "d2980f5290a6325f7fec77546ea7a165",
+          "HTTP-Status": 200
+        },
+        "cuerpo": {
+          "id": 901,
+          "estudianteId": 101,
+          "tipo": "CERTIFICADO_ACADEMICO",
+          "estado": "EMITIDO",
+          "servicio": "certificados"
+        },
+        "timestamp": "2026-11-24T17:35:23.731431+00:00"
+      }
+    },
+    {
+      "caso": "Certificados - Sin API Key",
+      "solicitud": "GET /api/certificados",
+      "apiKey": "(sin cabecera apikey)",
+      "esperado": [
+        401
+      ],
+      "observado": 401,
+      "aprobado": true,
+      "nota": "La nueva ruta también exige credencial",
+      "respuesta": {
+        "url": "http://localhost:8000/api/certificados",
+        "metodo": "GET",
+        "apiKeyEnviada": null,
+        "estado": 401,
+        "duracionMs": 26.5,
+        "cabeceras": {
+          "Content-Type": "application/json; charset=utf-8",
+          "WWW-Authenticate": "Key",
+          "X-Kong-Response-Latency": "0",
+          "Server": "kong/3.9.5",
+          "X-Kong-Request-Id": "f18da7332871df3c4e032c575edf0d3f",
+          "HTTP-Status": 401
+        },
+        "cuerpo": {
+          "message": "No API key found in request",
+          "request_id": "f18da7332871df3c4e032c575edf0d3f"
+        },
+        "timestamp": "2026-11-24T17:35:23.756662+00:00"
+      }
+    },
+    {
+      "caso": "Reto 3 - Ráfaga de 6 solicitudes",
+      "solicitud": "GET /api/pagos x6",
+      "apiKey": "educonnect-rate-key-2026",
+      "secuenciaEstados": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        429
+      ],
+      "primerEstado": 200,
+      "ultimoEstado": 429,
+      "intentos": [
+        {
+          "numero": 1,
+          "estado": 200,
+          "timestamp": "2026-11-24T17:35:23.765245+00:00",
+          "rateLimitRemaining": null,
+          "retryAfter": null,
+          "cuerpo": {
+            "id": 701,
+            "matriculaId": 501,
+            "valor": 150,
+            "moneda": "USD",
+            "estado": "PENDIENTE",
+            "servicio": "pagos"
+          }
+        },
+        {
+          "numero": 2,
+          "estado": 200,
+          "timestamp": "2026-11-24T17:35:24.059933+00:00",
+          "rateLimitRemaining": null,
+          "retryAfter": null,
+          "cuerpo": {
+            "id": 701,
+            "matriculaId": 501,
+            "valor": 150,
+            "moneda": "USD",
+            "estado": "PENDIENTE",
+            "servicio": "pagos"
+          }
+        },
+        {
+          "numero": 3,
+          "estado": 200,
+          "timestamp": "2026-11-24T17:35:24.326041+00:00",
+          "rateLimitRemaining": null,
+          "retryAfter": null,
+          "cuerpo": {
+            "id": 701,
+            "matriculaId": 501,
+            "valor": 150,
+            "moneda": "USD",
+            "estado": "PENDIENTE",
+            "servicio": "pagos"
+          }
+        },
+        {
+          "numero": 4,
+          "estado": 200,
+          "timestamp": "2026-11-24T17:35:24.603859+00:00",
+          "rateLimitRemaining": null,
+          "retryAfter": null,
+          "cuerpo": {
+            "id": 701,
+            "matriculaId": 501,
+            "valor": 150,
+            "moneda": "USD",
+            "estado": "PENDIENTE",
+            "servicio": "pagos"
+          }
+        },
+        {
+          "numero": 5,
+          "estado": 200,
+          "timestamp": "2026-11-24T17:35:24.884888+00:00",
+          "rateLimitRemaining": null,
+          "retryAfter": null,
+          "cuerpo": {
+            "id": 701,
+            "matriculaId": 501,
+            "valor": 150,
+            "moneda": "USD",
+            "estado": "PENDIENTE",
+            "servicio": "pagos"
+          }
+        },
+        {
+          "numero": 6,
+          "estado": 429,
+          "timestamp": "2026-11-24T17:35:25.145759+00:00",
+          "rateLimitRemaining": null,
+          "retryAfter": "35",
+          "cuerpo": {
+            "message": "API rate limit exceeded",
+            "request_id": "776fea067c04fd7e4ad8582e4908fa58"
+          }
+        }
+      ],
+      "aprobado": true
+    },
+    {
+      "caso": "Certificados - Ráfaga de 3 solicitudes",
+      "solicitud": "GET /api/certificados x3",
+      "apiKey": "educonnect-cert-key-2026",
+      "secuenciaEstados": [
+        200,
+        200,
+        429
+      ],
+      "primerEstado": 200,
+      "ultimoEstado": 429,
+      "intentos": [
+        {
+          "numero": 1,
+          "estado": 200,
+          "timestamp": "2026-11-24T17:35:25.414927+00:00",
+          "rateLimitRemaining": null,
+          "retryAfter": null,
+          "cuerpo": {
+            "id": 901,
+            "estudianteId": 101,
+            "tipo": "CERTIFICADO_ACADEMICO",
+            "estado": "EMITIDO",
+            "servicio": "certificados"
+          }
+        },
+        {
+          "numero": 2,
+          "estado": 200,
+          "timestamp": "2026-11-24T17:35:25.700559+00:00",
+          "rateLimitRemaining": null,
+          "retryAfter": null,
+          "cuerpo": {
+            "id": 901,
+            "estudianteId": 101,
+            "tipo": "CERTIFICADO_ACADEMICO",
+            "estado": "EMITIDO",
+            "servicio": "certificados"
+          }
+        },
+        {
+          "numero": 3,
+          "estado": 429,
+          "timestamp": "2026-11-24T17:35:25.976964+00:00",
+          "rateLimitRemaining": null,
+          "retryAfter": "35",
+          "cuerpo": {
+            "message": "API rate limit exceeded",
+            "request_id": "255a1f5b80395446a0f10a256188bc4a"
+          }
+        }
+      ],
+      "aprobado": true
+    }
+  ]
+}

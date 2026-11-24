@@ -1,0 +1,140 @@
+# ---------------------------------------------------------------------------
+# Kong Gateway 3.9.5 - Configuración declarativa DB-less
+# Grupo 3 - Taller EduConnect API Gateway
+#
+# Punto de entrada único: http://localhost:8000
+# Credenciales de la PoC: ficticias, solo para el laboratorio.
+# ---------------------------------------------------------------------------
+_format_version: "3.0"
+_transform: true
+
+# ---------------------------------------------------------------------------
+# Consumidores externos ficticios y sus API Keys
+# ---------------------------------------------------------------------------
+consumers:
+  # Consumidor general: pruebas funcionales y navegación de la PoC
+  - username: educonnect-app
+    keyauth_credentials:
+      - key: educonnect-poc-key-2026
+
+  # Consumidor dedicado a la prueba de saturación del Reto 3
+  - username: educonnect-rate
+    keyauth_credentials:
+      - key: educonnect-rate-key-2026
+
+  # Consumidor dedicado a Certificados (Reto de transferencia)
+  - username: educonnect-cert
+    keyauth_credentials:
+      - key: educonnect-cert-key-2026
+
+# ---------------------------------------------------------------------------
+# Servicios (destino interno) + Rutas (criterio de coincidencia público)
+#
+# Nota: cada ruta usa strip_path: true. Kong elimina el prefijo público
+# /api/<recurso> y reenvía la ruta interna definida en service.url.
+# Ej.: GET /api/estudiantes -> http://estudiantes:3001/estudiantes
+# ---------------------------------------------------------------------------
+services:
+  - name: estudiantes-service
+    url: http://estudiantes:3001/estudiantes
+    connect_timeout: 5000
+    read_timeout: 10000
+    routes:
+      - name: estudiantes-route
+        paths:
+          - /api/estudiantes
+        methods:
+          - GET
+        strip_path: true
+        plugins:
+          - name: key-auth
+            config:
+              key_names:
+                - apikey
+              hide_credentials: true
+          - name: rate-limiting
+            config:
+              minute: 5
+              policy: local
+              limit_by: consumer
+              hide_client_headers: false
+              fault_tolerant: true
+
+  - name: matriculas-service
+    url: http://matriculas:3002/matriculas
+    connect_timeout: 5000
+    read_timeout: 10000
+    routes:
+      - name: matriculas-route
+        paths:
+          - /api/matriculas
+        methods:
+          - GET
+        strip_path: true
+        plugins:
+          - name: key-auth
+            config:
+              key_names:
+                - apikey
+              hide_credentials: true
+          - name: rate-limiting
+            config:
+              minute: 5
+              policy: local
+              limit_by: consumer
+              hide_client_headers: false
+              fault_tolerant: true
+
+  - name: pagos-service
+    url: http://pagos:3003/pagos
+    connect_timeout: 5000
+    read_timeout: 10000
+    routes:
+      - name: pagos-route
+        paths:
+          - /api/pagos
+        methods:
+          - GET
+        strip_path: true
+        plugins:
+          - name: key-auth
+            config:
+              key_names:
+                - apikey
+              hide_credentials: true
+          - name: rate-limiting
+            config:
+              minute: 5
+              policy: local
+              limit_by: consumer
+              hide_client_headers: false
+              fault_tolerant: true
+
+  # -------------------------------------------------------------------------
+  # Reto de transferencia: Certificados Académicos
+  # Límite distinto y más estricto: 2 solicitudes/minuto por consumidor.
+  # -------------------------------------------------------------------------
+  - name: certificados-service
+    url: http://certificados:3004/certificados
+    connect_timeout: 5000
+    read_timeout: 10000
+    routes:
+      - name: certificados-route
+        paths:
+          - /api/certificados
+        methods:
+          - GET
+        strip_path: true
+        plugins:
+          - name: key-auth
+            config:
+              key_names:
+                - apikey
+              hide_credentials: true
+          - name: rate-limiting
+            config:
+              minute: 2
+              policy: local
+              limit_by: consumer
+              hide_client_headers: false
+              fault_tolerant: true
