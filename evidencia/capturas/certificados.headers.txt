@@ -1,0 +1,19 @@
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 126
+Connection: keep-alive
+X-RateLimit-Limit-Minute: 2
+RateLimit-Remaining: 1
+RateLimit-Reset: 49
+RateLimit-Limit: 2
+X-RateLimit-Remaining-Minute: 1
+X-Service: certificados
+X-Mock-Port: 3004
+Cache-Control: no-store
+Date: Tue, 24 Nov 2026 18:39:11 GMT
+Server: kong/3.9.5
+X-Kong-Upstream-Latency: 6
+X-Kong-Proxy-Latency: 2
+Via: 1.1 kong/3.9.5
+X-Kong-Request-Id: 6d4b7777b8b8e8097ec22c140ba0a117
+

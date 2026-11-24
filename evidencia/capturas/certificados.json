@@ -1,0 +1,7 @@
+{
+  "id": 901,
+  "estudianteId": 101,
+  "tipo": "CERTIFICADO_ACADEMICO",
+  "estado": "EMITIDO",
+  "servicio": "certificados"
+}

@@ -1,0 +1,19 @@
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 111
+Connection: keep-alive
+X-RateLimit-Limit-Minute: 5
+RateLimit-Remaining: 4
+RateLimit-Reset: 49
+RateLimit-Limit: 5
+X-RateLimit-Remaining-Minute: 4
+X-Service: matriculas
+X-Mock-Port: 3002
+Cache-Control: no-store
+Date: Tue, 24 Nov 2026 18:39:11 GMT
+Server: kong/3.9.5
+X-Kong-Upstream-Latency: 9
+X-Kong-Proxy-Latency: 4
+Via: 1.1 kong/3.9.5
+X-Kong-Request-Id: 0553c26b89afc6629400522abb130a7c
+
