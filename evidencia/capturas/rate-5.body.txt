@@ -1,8 +1,0 @@
-{
-  "id": 701,
-  "matriculaId": 501,
-  "valor": 150,
-  "moneda": "USD",
-  "estado": "PENDIENTE",
-  "servicio": "pagos"
-}

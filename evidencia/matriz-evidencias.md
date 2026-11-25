@@ -1,79 +1,20 @@
-# Matriz de evidencias — Taller EduConnect API Gateway
+# Matriz de evidencias del taller
 
-**Universidad de las Américas**  
-**Facultad de Ingeniería y Ciencias Aplicadas**  
-**Asignatura:** Taller EduConnect API Gateway  
-**Grupo 3**  
-**Integrantes:** Jhoel Suarez, Mauricio Mora, Stefan Jativa y Justin Gomezcoello
+Ejecución en Windows con Docker Desktop, Kong 3.9.5 y Postman. Las capturas enumeradas se tomaron de las ventanas de las aplicaciones en uso. Las respuestas HTTP se contrastaron con la suite ejecutada el 24 de noviembre de 2026 (hora local de Ecuador).
 
-## Reto 0 — Comprender y desplegar Kong
+| Reto | Predicción | Decisión | Prueba y resultado observado | Evidencia | Límite de la conclusión |
+|---|---|---|---|---|---|
+| 0. Despliegue | Si los contenedores comparten una red y Kong usa nombres DNS de Compose, podrá resolver los backends sin IP fija. | Kong 3.9.5 DB-less; red `educonnect-net`; Compose define Kong y cuatro mocks. | Docker Desktop mostró el stack `educonnect-gateway` expandido con cinco contenedores en ejecución. `docker compose ps` los confirmó saludables. | `docker-desktop-01-contenedores.jpg`; `resultados-pruebas.json` | La ejecución local no demuestra alta disponibilidad en varias máquinas. |
+| 1. Enrutamiento | Las rutas públicas `GET /api/{estudiantes,matriculas,pagos}` y Certificados con una clave válida responderán `200` desde su backend específico. | Un Service por mock; una Route por URL; `strip_path: true`. | Estudiantes, Matrículas, Pagos y Certificados devolvieron `200`; JSON y `X-Service` permitieron identificar el mock. | `postman-02-estudiantes-200.jpg`, `postman-04-matriculas-200.jpg`, `postman-05-pagos-200.jpg`, `postman-09-certificados-200.jpg` | Se usan datos estáticos de demostración, no lógica ni persistencia de negocio. |
+| 2. API Key | La falta o invalidez de credencial devolverá `401`; una clave registrada accederá a una ruta existente. | Plugin `key-auth`, cabecera `apikey`, tres Consumers ficticios; `hide_credentials: true`. | Suite: sin clave `401`, clave incorrecta `401`, clave válida `200`; Certificados sin clave `401`. | `postman-06-sin-key-401.jpg`; respuestas de la suite en `resultados-pruebas.json` | AuthN identifica el Consumer. No concede permisos por usuario, matrícula, operación o recurso. |
+| 3. Rate limiting | Con una clave nueva, cinco llamadas en un minuto darán `200` y la sexta `429`. | `minute: 5`, `policy: local`, `limit_by: consumer`. | Suite: `[200, 200, 200, 200, 200, 429]` en Pagos. | `resultados-pruebas.json` | El contador es local y la ventana temporal importa; no se comparte entre réplicas de Kong. |
+| 4. Fallos | Una ruta sin coincidencia devolverá `404`; al detener Pagos Kong mostrará un error de proxy; al recuperar el servicio, la ruta volverá a responder. | Solicitud a `/api/desconocido`; detención temporal de Pagos, envío desde Postman y recuperación del mock. | Ruta inexistente: `404`. Pagos detenido: Postman observó `503 Service Temporarily Unavailable` con mensaje `name resolution failed`. Tras iniciar Pagos, su healthcheck quedó sano; al reiniciar Kong y probar de nuevo, Postman observó `200`. | `postman-10-ruta-inexistente-404.jpg`, `postman-07-pagos-backend-detained-503.jpg`, `postman-08-pagos-recuperado-200.jpg`, `backend-no-disponible.json` | El código de fallo depende del momento y del estado DNS/conexión. En esta ejecución hubo que reiniciar Kong para recuperar la resolución del mock. |
+| Desafío. Certificados | Un cuarto mock podrá agregarse a la arquitectura con API Key y un límite distinto sin cambiar las rutas originales. | Nuevo mock `certificados:3004`, Service/Route, `key-auth` y `minute: 2`. | Suite: respuesta positiva `200`, sin clave `401`, ráfaga `[200, 200, 429]`. | `postman-09-certificados-200.jpg`, `resultados-pruebas.json` | El límite también es local. AuthN no implementa autorización para emitir o consultar certificados de una persona. |
 
-| Campo | Registro |
-|---|---|
-| Hipótesis | Si se levantan Kong y los cuatro mocks en una red Docker con nombres DNS, Kong podrá resolver cada backend sin configurar IPs rígidas. |
-| Decisión | Kong `3.9.5` en modo DB-less. Se fijó una versión compatible y se utilizó `kong.yml` declarativo. |
-| Prueba | `docker compose up -d --build` y `docker compose ps`. |
-| Resultado | Los cinco contenedores quedaron operativos y el mock de estudiantes pasó el healthcheck. |
-| Evidencia | `contenedores.txt`, salida de `docker compose ps` y registros de Kong. |
-| Limitación | DB-less ofrece buena reproducibilidad local, pero no conserva una administración central dinámica ni estado de datos fuera del archivo declarativo. |
+## Resumen de ejecución reproducible
 
-### Comando exacto
+La suite `python scripts/verify.py` registró 11 casos aprobados de 11. El JSON guarda método, URL local, estado, cabeceras relevantes, cuerpo y marcas temporales. La prueba con backend detenido se documenta aparte porque exige detener y recuperar el contenedor de Pagos.
 
-```powershell
-docker compose ps --format "table {{.Name}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
-```
+## Definición de evidencia visual
 
-## Reto 1 — Unificar el punto de acceso
-
-| Campo | Registro |
-|---|---|
-| Hipótesis | Las rutas públicas `/api/estudiantes`, `/api/matriculas`, `/api/pagos` y `/api/certificados`, con API Key válida, llegarán a sus servicios correspondientes y devolverán 200. |
-| Decisión | Se creó un `Service` por backend y una `Route` por URL pública; `strip_path: true` elimina el prefijo público. |
-| Prueba | Suite `python scripts/verify.py`; pruebas individuales con `curl.exe -i`. |
-| Resultado | Las cuatro rutas fueron observadas con HTTP 200 en la ejecución de la suite. |
-| Evidencia | `resultados-pruebas.json`. |
-| Limitación | `Service` y `Route` son independientes: cambiar la IP interna no afecta al cliente si se conserva el nombre DNS, pero sí debe actualizarse la URL del Service si cambia el puerto o nombre DNS real. |
-
-## Reto 2 — API Key
-
-| Campo | Registro |
-|---|---|
-| Hipótesis | Sin credencial o con una credencial inexistente, key-auth responderá 401; una credencial registrada permitirá una ruta válida. |
-| Decisión | Cabecera ficticia `apikey`, plugin key-auth en cada ruta. |
-| Prueba | Sin key, key inválida y key válida; respuestas observadas `401`, `401` y `200`. |
-| Resultado | Coincide con la hipótesis. |
-| Evidencia | `resultados-pruebas.json`. |
-| Limitación | API Key demuestra autenticación del consumidor, no autorización sobre matrícula, persona, operación o recurso. No cifra por sí sola las solicitudes ni sustituye identidad de usuario final ni autorización RBAC/ABAC. |
-
-## Reto 3 — Controlar consumo
-
-| Campo | Registro |
-|---|---|
-| Hipótesis | Un consumidor nuevo recibirá cinco respuestas 200 y la sexta en la misma ventana recibirá 429. |
-| Decisión | `rate-limiting`, `minute: 5`, `policy: local`, `limit_by: consumer`, aplicado a las rutas del laboratorio. |
-| Prueba | Seis solicitudes consecutivas con `educonnect-rate-key-2026` a `/api/pagos`. |
-| Resultado observado | Secuencia `[200, 200, 200, 200, 200, 429]`. |
-| Evidencia | `resultados-pruebas.json`. |
-| Limitación | El contador local no se comparte entre instancias. En producción se debe usar una política distribuida con Redis o una solución aprobada, además de identidad y límites por consumidor, ruta y entorno. |
-
-## Reto 4 — Comportamiento y evidencias
-
-| Campo | Registro |
-|---|---|
-| Hipótesis | Una ruta inexistente responderá 404. Si se detiene un mock, Kong devolverá un error de proxy (normalmente 500/502/503/504 según el estado de la conexión). |
-| Decisión | Se probó `/api/desconocido` y se detuvo temporalmente el contenedor de Pagos. |
-| Prueba | `curl.exe` y `python scripts/test-backend-down.py`. |
-| Resultado | Ruta desconocida: 404. Backend detenido: HTTP 500. Tras reiniciar el contenedor volvió a iniciarse el mock; también se registró 503 durante su arranque/heatlhcheck. |
-| Evidencia | `backend-no-disponible.json` y `docker compose ps`. |
-| Limitación | Los códigos varían según el momento exacto de desconexión y configuración del balanceador/proxy; la prueba registra el estado real y no una cifra predeterminada. |
-
-## Desafío de transferencia — Certificados
-
-| Campo | Registro |
-|---|---|
-| Hipótesis | Una cuarta ruta `/api/certificados` estará protegida con key-auth y aplicará un límite distinto de 2/min para su consumidor dedicado. |
-| Decisión | Nuevo mock independiente, puerto interno 3004, Service/Route/Kong declarativos y `minute: 2`. |
-| Prueba | Dos solicitudes 200 seguidas y una tercera 429 con la key dedicada. También se verificó API Key válida y ausencia de credencial. |
-| Resultado | Secuencia válida `[200, 200, 429]`; la prueba sin key fue 401 y con key general fue 200. |
-| Evidencia | `resultados-pruebas.json`. |
-| Limitación | El límite 2/min es local, no distribuido. La key general de app no demuestra autorización específica para certificados. |
+Las capturas `postman-*` muestran el estado de Postman y su respuesta en la ventana de escritorio. La captura `docker-desktop-*` muestra el stack real en Docker Desktop. La colección Postman organiza cada caso y las rutas públicas. Los archivos `resultados-pruebas.json` y `backend-no-disponible.json` contienen respuestas estructuradas de las ejecuciones.

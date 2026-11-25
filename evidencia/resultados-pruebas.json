@@ -2,7 +2,7 @@
   "proyecto": "EduConnect API Gateway - Grupo 3",
   "gateway": "http://localhost:8000",
   "versionKong": "3.9.5",
-  "fechaEjecucion": "2026-11-24T18:36:24.898689+00:00",
+  "fechaEjecucion": "2026-11-25T02:40:07.674898+00:00",
   "totalCasos": 11,
   "casosAprobados": 11,
   "casosFallidos": 0,
@@ -22,12 +22,12 @@
         "metodo": "GET",
         "apiKeyEnviada": "educonnect-poc-key-2026",
         "estado": 200,
-        "duracionMs": 4126.6,
+        "duracionMs": 4149.1,
         "cabeceras": {
           "Content-Type": "application/json; charset=utf-8",
           "X-Service": "estudiantes",
           "Server": "kong/3.9.5",
-          "X-Kong-Request-Id": "a880817291ef3e43c4293a2bf18ad165",
+          "X-Kong-Request-Id": "96d02e6065f1ce2449c1dc2f792e1771",
           "HTTP-Status": 200
         },
         "cuerpo": {
@@ -36,7 +36,7 @@
           "carrera": "Ingenieria de Software",
           "servicio": "estudiantes"
         },
-        "timestamp": "2026-11-24T18:36:10.371018+00:00"
+        "timestamp": "2026-11-25T02:39:57.199333+00:00"
       },
       "servicioEsperado": "estudiantes",
       "servicioObservado": "estudiantes"
@@ -56,12 +56,12 @@
         "metodo": "GET",
         "apiKeyEnviada": "educonnect-poc-key-2026",
         "estado": 200,
-        "duracionMs": 3998.9,
+        "duracionMs": 4026.0,
         "cabeceras": {
           "Content-Type": "application/json; charset=utf-8",
           "X-Service": "matriculas",
           "Server": "kong/3.9.5",
-          "X-Kong-Request-Id": "bc0df422a180b61d3804501bc2a19659",
+          "X-Kong-Request-Id": "dfedfb0dab28635d3f6c1c6b9e18c67e",
           "HTTP-Status": 200
         },
         "cuerpo": {
@@ -71,7 +71,7 @@
           "estado": "ACTIVA",
           "servicio": "matriculas"
         },
-        "timestamp": "2026-11-24T18:36:14.369295+00:00"
+        "timestamp": "2026-11-25T02:40:01.225969+00:00"
       },
       "servicioEsperado": "matriculas",
       "servicioObservado": "matriculas"
@@ -91,12 +91,12 @@
         "metodo": "GET",
         "apiKeyEnviada": "educonnect-poc-key-2026",
         "estado": 200,
-        "duracionMs": 4012.7,
+        "duracionMs": 22.5,
         "cabeceras": {
           "Content-Type": "application/json; charset=utf-8",
           "X-Service": "pagos",
           "Server": "kong/3.9.5",
-          "X-Kong-Request-Id": "2bccc14da144ce5c127f487a75273c3d",
+          "X-Kong-Request-Id": "7e33fa54ec92931a6a1d621521045860",
           "HTTP-Status": 200
         },
         "cuerpo": {
@@ -107,7 +107,7 @@
           "estado": "PENDIENTE",
           "servicio": "pagos"
         },
-        "timestamp": "2026-11-24T18:36:18.382789+00:00"
+        "timestamp": "2026-11-25T02:40:01.248880+00:00"
       },
       "servicioEsperado": "pagos",
       "servicioObservado": "pagos"
@@ -127,20 +127,20 @@
         "metodo": "GET",
         "apiKeyEnviada": null,
         "estado": 401,
-        "duracionMs": 30.7,
+        "duracionMs": 8.0,
         "cabeceras": {
           "Content-Type": "application/json; charset=utf-8",
           "WWW-Authenticate": "Key",
-          "X-Kong-Response-Latency": "5",
+          "X-Kong-Response-Latency": "1",
           "Server": "kong/3.9.5",
-          "X-Kong-Request-Id": "a0632c001ebf1b149546c13443d12521",
+          "X-Kong-Request-Id": "df64572d0aedfa010a1259540a2db748",
           "HTTP-Status": 401
         },
         "cuerpo": {
           "message": "No API key found in request",
-          "request_id": "a0632c001ebf1b149546c13443d12521"
+          "request_id": "df64572d0aedfa010a1259540a2db748"
         },
-        "timestamp": "2026-11-24T18:36:18.414449+00:00"
+        "timestamp": "2026-11-25T02:40:01.257878+00:00"
       }
     },
     {
@@ -158,20 +158,20 @@
         "metodo": "GET",
         "apiKeyEnviada": "clave-invalida-de-prueba",
         "estado": 401,
-        "duracionMs": 19.6,
+        "duracionMs": 11.8,
         "cabeceras": {
           "Content-Type": "application/json; charset=utf-8",
           "WWW-Authenticate": "Key",
-          "X-Kong-Response-Latency": "3",
+          "X-Kong-Response-Latency": "1",
           "Server": "kong/3.9.5",
-          "X-Kong-Request-Id": "c06f605fd74e583c6c2d1d7543546232",
+          "X-Kong-Request-Id": "eac28a6e6b3c5348a5fae179653ee46b",
           "HTTP-Status": 401
         },
         "cuerpo": {
           "message": "Unauthorized",
-          "request_id": "c06f605fd74e583c6c2d1d7543546232"
+          "request_id": "eac28a6e6b3c5348a5fae179653ee46b"
         },
-        "timestamp": "2026-11-24T18:36:18.434256+00:00"
+        "timestamp": "2026-11-25T02:40:01.269942+00:00"
       }
     },
     {
@@ -189,12 +189,12 @@
         "metodo": "GET",
         "apiKeyEnviada": "educonnect-poc-key-2026",
         "estado": 200,
-        "duracionMs": 19.8,
+        "duracionMs": 32.0,
         "cabeceras": {
           "Content-Type": "application/json; charset=utf-8",
           "X-Service": "estudiantes",
           "Server": "kong/3.9.5",
-          "X-Kong-Request-Id": "9127f24a495d7c4225aada6c54b0dc3d",
+          "X-Kong-Request-Id": "f231582da008e35b90e7023ec023f77e",
           "HTTP-Status": 200
         },
         "cuerpo": {
@@ -203,7 +203,7 @@
           "carrera": "Ingenieria de Software",
           "servicio": "estudiantes"
         },
-        "timestamp": "2026-11-24T18:36:18.454050+00:00"
+        "timestamp": "2026-11-25T02:40:01.302618+00:00"
       }
     },
     {
@@ -221,19 +221,19 @@
         "metodo": "GET",
         "apiKeyEnviada": "educonnect-poc-key-2026",
         "estado": 404,
-        "duracionMs": 14.0,
+        "duracionMs": 7.2,
         "cabeceras": {
           "Content-Type": "application/json; charset=utf-8",
           "X-Kong-Response-Latency": "1",
           "Server": "kong/3.9.5",
-          "X-Kong-Request-Id": "fed1c82ebcadf65a0579ae536416b748",
+          "X-Kong-Request-Id": "f6e2417bbd3ea4411af6ec778cb3705b",
           "HTTP-Status": 404
         },
         "cuerpo": {
           "message": "no Route matched with those values",
-          "request_id": "fed1c82ebcadf65a0579ae536416b748"
+          "request_id": "f6e2417bbd3ea4411af6ec778cb3705b"
         },
-        "timestamp": "2026-11-24T18:36:18.468511+00:00"
+        "timestamp": "2026-11-25T02:40:01.308453+00:00"
       }
     },
     {
@@ -251,12 +251,12 @@
         "metodo": "GET",
         "apiKeyEnviada": "educonnect-poc-key-2026",
         "estado": 200,
-        "duracionMs": 4021.1,
+        "duracionMs": 3974.7,
         "cabeceras": {
           "Content-Type": "application/json; charset=utf-8",
           "X-Service": "certificados",
           "Server": "kong/3.9.5",
-          "X-Kong-Request-Id": "83228e66b05ecc0bd8b876102ba30f59",
+          "X-Kong-Request-Id": "4f6989765418ab640f3ca36a2e578504",
           "HTTP-Status": 200
         },
         "cuerpo": {
@@ -266,7 +266,7 @@
           "estado": "EMITIDO",
           "servicio": "certificados"
         },
-        "timestamp": "2026-11-24T18:36:22.489360+00:00"
+        "timestamp": "2026-11-25T02:40:05.284421+00:00"
       }
     },
     {
@@ -284,20 +284,20 @@
         "metodo": "GET",
         "apiKeyEnviada": null,
         "estado": 401,
-        "duracionMs": 7.1,
+        "duracionMs": 7.8,
         "cabeceras": {
           "Content-Type": "application/json; charset=utf-8",
           "WWW-Authenticate": "Key",
           "X-Kong-Response-Latency": "0",
           "Server": "kong/3.9.5",
-          "X-Kong-Request-Id": "414e0b4f9ce2b03b1c2ee13efd5bff71",
+          "X-Kong-Request-Id": "ff400e424ea8bf55cc6f4b037d740817",
           "HTTP-Status": 401
         },
         "cuerpo": {
           "message": "No API key found in request",
-          "request_id": "414e0b4f9ce2b03b1c2ee13efd5bff71"
+          "request_id": "ff400e424ea8bf55cc6f4b037d740817"
         },
-        "timestamp": "2026-11-24T18:36:22.497110+00:00"
+        "timestamp": "2026-11-25T02:40:05.292016+00:00"
       }
     },
     {
@@ -318,7 +318,7 @@
         {
           "numero": 1,
           "estado": 200,
-          "timestamp": "2026-11-24T18:36:22.509024+00:00",
+          "timestamp": "2026-11-25T02:40:05.300265+00:00",
           "rateLimitRemaining": null,
           "retryAfter": null,
           "cuerpo": {
@@ -333,7 +333,7 @@
         {
           "numero": 2,
           "estado": 200,
-          "timestamp": "2026-11-24T18:36:22.769480+00:00",
+          "timestamp": "2026-11-25T02:40:05.564046+00:00",
           "rateLimitRemaining": null,
           "retryAfter": null,
           "cuerpo": {
@@ -348,7 +348,7 @@
         {
           "numero": 3,
           "estado": 200,
-          "timestamp": "2026-11-24T18:36:23.034732+00:00",
+          "timestamp": "2026-11-25T02:40:05.835282+00:00",
           "rateLimitRemaining": null,
           "retryAfter": null,
           "cuerpo": {
@@ -363,7 +363,7 @@
         {
           "numero": 4,
           "estado": 200,
-          "timestamp": "2026-11-24T18:36:23.311908+00:00",
+          "timestamp": "2026-11-25T02:40:06.098669+00:00",
           "rateLimitRemaining": null,
           "retryAfter": null,
           "cuerpo": {
@@ -378,7 +378,7 @@
         {
           "numero": 5,
           "estado": 200,
-          "timestamp": "2026-11-24T18:36:23.585724+00:00",
+          "timestamp": "2026-11-25T02:40:06.359056+00:00",
           "rateLimitRemaining": null,
           "retryAfter": null,
           "cuerpo": {
@@ -393,12 +393,12 @@
         {
           "numero": 6,
           "estado": 429,
-          "timestamp": "2026-11-24T18:36:23.858825+00:00",
+          "timestamp": "2026-11-25T02:40:06.618218+00:00",
           "rateLimitRemaining": null,
-          "retryAfter": "37",
+          "retryAfter": "54",
           "cuerpo": {
             "message": "API rate limit exceeded",
-            "request_id": "d5578e33363dfc31f11e6b07587a1c1a"
+            "request_id": "43ca1260f148615f9d32986c93339c56"
           }
         }
       ],
@@ -419,7 +419,7 @@
         {
           "numero": 1,
           "estado": 200,
-          "timestamp": "2026-11-24T18:36:24.118876+00:00",
+          "timestamp": "2026-11-25T02:40:06.895931+00:00",
           "rateLimitRemaining": null,
           "retryAfter": null,
           "cuerpo": {
@@ -433,7 +433,7 @@
         {
           "numero": 2,
           "estado": 200,
-          "timestamp": "2026-11-24T18:36:24.385780+00:00",
+          "timestamp": "2026-11-25T02:40:07.163844+00:00",
           "rateLimitRemaining": null,
           "retryAfter": null,
           "cuerpo": {
@@ -447,12 +447,12 @@
         {
           "numero": 3,
           "estado": 429,
-          "timestamp": "2026-11-24T18:36:24.647305+00:00",
+          "timestamp": "2026-11-25T02:40:07.424159+00:00",
           "rateLimitRemaining": null,
-          "retryAfter": "36",
+          "retryAfter": "53",
           "cuerpo": {
             "message": "API rate limit exceeded",
-            "request_id": "f57d3e0ce443694a0c4d2354eaf43d43"
+            "request_id": "c4871a77618f83144ff2f83a0502c311"
           }
         }
       ],

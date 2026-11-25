@@ -1,55 +1,57 @@
 {
   "info": {
     "name": "EduConnect API Gateway - Grupo 3",
-    "description": "Colección reproducible para Kong 3.9.5: rutas, API Key, rate limiting y backend no disponible.",
+    "description": "Colección de pruebas de la PoC EduConnect. Todas las solicitudes usan GET y el punto de entrada {{baseUrl}}. Las rutas protegidas envían la cabecera apikey. Enviar una solicitud con Send permite revisar el estado HTTP y el JSON. Variables ficticias: baseUrl, apiKey, rateKey y certKey. Casos: enrutamiento 200, autenticación 401, ruta no registrada 404, límites 429 y transferencia de Certificados. Para las ráfagas, ejecutar la solicitud indicada seis veces (Pagos) o tres veces (Certificados) dentro de una ventana de minuto; si el primer resultado es 429, esperar a que la ventana termine o reiniciar Kong para limpiar el contador local. La solicitud de backend caído es manual: detener solo el mock de Pagos, enviarla, iniciar Pagos y esperar healthy.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8000" },
-    { "key": "apiKey", "value": "educonnect-poc-key-2026" },
-    { "key": "rateKey", "value": "educonnect-rate-key-2026" },
-    { "key": "certKey", "value": "educonnect-cert-key-2026" }
+    {"key": "baseUrl", "value": "http://localhost:8000", "type": "string"},
+    {"key": "apiKey", "value": "educonnect-poc-key-2026", "type": "string"},
+    {"key": "rateKey", "value": "educonnect-rate-key-2026", "type": "string"},
+    {"key": "certKey", "value": "educonnect-cert-key-2026", "type": "string"}
   ],
   "item": [
     {
-      "name": "Estudiantes - positiva",
-      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{apiKey}}" }], "url": "{{baseUrl}}/api/estudiantes" }
+      "name": "Reto 1 - Punto de acceso único",
+      "description": "Comprueba que cada ruta pública selecciona su backend. Respuesta esperada: 200 OK, Content-Type application/json y el campo servicio debe identificar el mock.",
+      "item": [
+        {"name":"Estudiantes - positiva","description":"Objetivo: comprobar el enrutamiento a estudiantes. Método GET; URL {{baseUrl}}/api/estudiantes; cabecera apikey: {{apiKey}}. Respuesta esperada: 200 OK y JSON con servicio=estudiantes.","request":{"method":"GET","header":[{"key":"apikey","value":"{{apiKey}}","description":"API Key ficticia de educonnect-app"}],"url":{"raw":"{{baseUrl}}/api/estudiantes","host":["{{baseUrl}}"],"path":["api","estudiantes"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 200', function () { pm.response.to.have.status(200); });","pm.test('Responde Estudiantes', function () { pm.expect(pm.response.json().servicio).to.eql('estudiantes'); });"]}}]},
+        {"name":"Matrículas - positiva","description":"Objetivo: comprobar el enrutamiento a matrículas. Método GET; URL {{baseUrl}}/api/matriculas; cabecera apikey: {{apiKey}}. Respuesta esperada: 200 OK y JSON con servicio=matriculas.","request":{"method":"GET","header":[{"key":"apikey","value":"{{apiKey}}","description":"API Key ficticia de educonnect-app"}],"url":{"raw":"{{baseUrl}}/api/matriculas","host":["{{baseUrl}}"],"path":["api","matriculas"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 200', function () { pm.response.to.have.status(200); });","pm.test('Responde Matrículas', function () { pm.expect(pm.response.json().servicio).to.eql('matriculas'); });"]}}]},
+        {"name":"Pagos - positiva","description":"Objetivo: comprobar el enrutamiento a pagos. Método GET; URL {{baseUrl}}/api/pagos; cabecera apikey: {{apiKey}}. Respuesta esperada: 200 OK y JSON con servicio=pagos.","request":{"method":"GET","header":[{"key":"apikey","value":"{{apiKey}}","description":"API Key ficticia de educonnect-app"}],"url":{"raw":"{{baseUrl}}/api/pagos","host":["{{baseUrl}}"],"path":["api","pagos"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 200', function () { pm.response.to.have.status(200); });","pm.test('Responde Pagos', function () { pm.expect(pm.response.json().servicio).to.eql('pagos'); });"]}}]}
+      ]
     },
     {
-      "name": "Matriculas - positiva",
-      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{apiKey}}" }], "url": "{{baseUrl}}/api/matriculas" }
+      "name": "Reto 2 - Autenticación API Key",
+      "description": "Pruebas positivas y negativas de key-auth. Kong busca la cabecera apikey. Una clave válida identifica un Consumer; no autoriza operaciones o recursos de negocio.",
+      "item": [
+        {"name":"Sin API Key - 401","description":"Objetivo: confirmar que key-auth rechaza una solicitud sin credencial. Método GET; URL {{baseUrl}}/api/estudiantes; no enviar la cabecera apikey. Respuesta esperada: 401 Unauthorized.","request":{"method":"GET","header":[],"url":{"raw":"{{baseUrl}}/api/estudiantes","host":["{{baseUrl}}"],"path":["api","estudiantes"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 401 sin API Key', function () { pm.response.to.have.status(401); });"]}}]},
+        {"name":"API Key incorrecta - 401","description":"Objetivo: confirmar que una credencial no registrada se rechaza. Método GET; URL {{baseUrl}}/api/estudiantes; enviar apikey: clave-invalida-de-prueba. Respuesta esperada: 401 Unauthorized.","request":{"method":"GET","header":[{"key":"apikey","value":"clave-invalida-de-prueba","description":"Valor deliberadamente incorrecto"}],"url":{"raw":"{{baseUrl}}/api/estudiantes","host":["{{baseUrl}}"],"path":["api","estudiantes"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 401 con API Key incorrecta', function () { pm.response.to.have.status(401); });"]}}]},
+        {"name":"API Key válida - 200","description":"Objetivo: confirmar que un Consumer registrado puede continuar a una ruta existente. Método GET; URL {{baseUrl}}/api/estudiantes; cabecera apikey: {{apiKey}}. Respuesta esperada: 200 OK.","request":{"method":"GET","header":[{"key":"apikey","value":"{{apiKey}}","description":"API Key ficticia de educonnect-app"}],"url":{"raw":"{{baseUrl}}/api/estudiantes","host":["{{baseUrl}}"],"path":["api","estudiantes"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 200 con API Key válida', function () { pm.response.to.have.status(200); });"]}}]}
+      ]
     },
     {
-      "name": "Pagos - positiva",
-      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{apiKey}}" }], "url": "{{baseUrl}}/api/pagos" }
+      "name": "Reto 3 - Control de consumo",
+      "description": "Los límites son locales a Kong y se cuentan por Consumer. Ejecutar cada solicitud repetidamente durante una misma ventana de minuto.",
+      "item": [
+        {"name":"Pagos - límite 5 por minuto","description":"Objetivo: exceder el máximo de cinco solicitudes por minuto de educonnect-rate. Método GET; URL {{baseUrl}}/api/pagos; cabecera apikey: {{rateKey}}. Enviar seis veces seguidas. Resultado observado en la suite: cinco 200 y un 429. Un primer 429 significa que la ventana local ya estaba consumida.","request":{"method":"GET","header":[{"key":"apikey","value":"{{rateKey}}","description":"Consumer dedicado al rate limit"}],"url":{"raw":"{{baseUrl}}/api/pagos","host":["{{baseUrl}}"],"path":["api","pagos"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('Respuesta dentro del contrato de rate limit', function () { pm.expect([200, 429]).to.include(pm.response.code); });"]}}]},
+        {"name":"Certificados - límite 2 por minuto","description":"Objetivo: superar el límite distinto del servicio de Certificados. Método GET; URL {{baseUrl}}/api/certificados; cabecera apikey: {{certKey}}. Enviar tres veces seguidas. Resultado observado en la suite: dos 200 y un 429.","request":{"method":"GET","header":[{"key":"apikey","value":"{{certKey}}","description":"Consumer dedicado a Certificados"}],"url":{"raw":"{{baseUrl}}/api/certificados","host":["{{baseUrl}}"],"path":["api","certificados"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('Respuesta dentro del contrato de rate limit', function () { pm.expect([200, 429]).to.include(pm.response.code); });"]}}]}
+      ]
     },
     {
-      "name": "Sin API Key - 401",
-      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/estudiantes" }
+      "name": "Reto 4 - Comportamiento y diagnóstico",
+      "description": "Incluye la ruta sin coincidencia y el caso manual de backend temporalmente no disponible.",
+      "item": [
+        {"name":"Ruta no registrada - 404","description":"Objetivo: comprobar la respuesta cuando Kong no encuentra una Route. Método GET; URL {{baseUrl}}/api/desconocido; cabecera apikey: {{apiKey}}. Respuesta esperada: 404 Not Found; el cuerpo identifica que no hubo coincidencia.","request":{"method":"GET","header":[{"key":"apikey","value":"{{apiKey}}","description":"API Key ficticia de educonnect-app"}],"url":{"raw":"{{baseUrl}}/api/desconocido","host":["{{baseUrl}}"],"path":["api","desconocido"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 404 sin Route', function () { pm.response.to.have.status(404); });"]}}]},
+        {"name":"Pagos - backend no disponible (manual)","description":"Caso manual, porque primero debe detenerse el mock: ejecutar docker compose stop pagos en la raíz del repositorio. Enviar GET {{baseUrl}}/api/pagos con apikey: {{apiKey}}. Registrar el código observado (puede variar entre 500, 502, 503 o 504 según el estado DNS/conexión). Para recuperar: docker compose start pagos; esperar healthy con docker compose ps; si Kong retiene DNS antiguo, docker compose restart kong y esperar healthy. En esta ejecución Postman observó 503 name resolution failed; tras la recuperación observó 200.","request":{"method":"GET","header":[{"key":"apikey","value":"{{apiKey}}","description":"API Key ficticia de educonnect-app"}],"url":{"raw":"{{baseUrl}}/api/pagos","host":["{{baseUrl}}"],"path":["api","pagos"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('El proxy responde con HTTP', function () { pm.expect(pm.response.code).to.be.within(200, 599); });"]}}]}
+      ]
     },
     {
-      "name": "API Key incorrecta - 401",
-      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "clave-invalida-de-prueba" }], "url": "{{baseUrl}}/api/estudiantes" }
-    },
-    {
-      "name": "Ruta no registrada - 404",
-      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{apiKey}}" }], "url": "{{baseUrl}}/api/desconocido" }
-    },
-    {
-      "name": "Rate limit Pagos - ejecutar 6 veces",
-      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{rateKey}}" }], "url": "{{baseUrl}}/api/pagos" }
-    },
-    {
-      "name": "Certificados - positiva",
-      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{apiKey}}" }], "url": "{{baseUrl}}/api/certificados" }
-    },
-    {
-      "name": "Certificados sin API Key - 401",
-      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/certificados" }
-    },
-    {
-      "name": "Rate limit Certificados - ejecutar 3 veces",
-      "request": { "method": "GET", "header": [{ "key": "apikey", "value": "{{certKey}}" }], "url": "{{baseUrl}}/api/certificados" }
+      "name": "Desafío de transferencia - Certificados",
+      "description": "Ruta agregada para el servicio académico de Certificados: mock independiente, API Key y límite de consumo propio.",
+      "item": [
+        {"name":"Certificados - positiva","description":"Objetivo: comprobar el cuarto backend. Método GET; URL {{baseUrl}}/api/certificados; cabecera apikey: {{apiKey}}. Esperado: 200 OK, X-Service certificados y cuerpo JSON con servicio=certificados.","request":{"method":"GET","header":[{"key":"apikey","value":"{{apiKey}}","description":"API Key ficticia de educonnect-app"}],"url":{"raw":"{{baseUrl}}/api/certificados","host":["{{baseUrl}}"],"path":["api","certificados"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 200', function () { pm.response.to.have.status(200); });","pm.test('Responde Certificados', function () { pm.expect(pm.response.json().servicio).to.eql('certificados'); });"]}}]},
+        {"name":"Certificados sin API Key - 401","description":"Objetivo: verificar que la ruta nueva conserva key-auth. Método GET; URL {{baseUrl}}/api/certificados; no enviar apikey. Esperado: 401 Unauthorized.","request":{"method":"GET","header":[],"url":{"raw":"{{baseUrl}}/api/certificados","host":["{{baseUrl}}"],"path":["api","certificados"]}},"event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 401 sin API Key', function () { pm.response.to.have.status(401); });"]}}]}
+      ]
     }
   ]
 }

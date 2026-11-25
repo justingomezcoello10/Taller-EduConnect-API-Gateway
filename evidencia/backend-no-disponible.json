@@ -1,11 +1,20 @@
 {
   "caso": "Reto 4 - Backend no disponible",
-  "fechaEjecucion": "2026-11-24T18:11:59.216205+00:00",
+  "fechaEjecucion": "2026-11-25T02:40:00.620350+00:00",
   "accion": "docker compose stop pagos",
   "solicitud": "GET /api/pagos con API Key válida",
   "estadoConBackendDetenido": 500,
-  "cuerpoConBackendDetenido": "An unexpected error occurred\nrequest_id: ca22095376b4dc62051b8b385e424956\n",
-  "estadoTrasRecuperacion": 503,
-  "aprobado": false,
-  "estadoTrasRecuperacionTrasHealthcheck": 429
+  "cuerpoConBackendDetenido": "An unexpected error occurred\nrequest_id: da44d25bf80da45b6c38943356550e0d\n",
+  "estadoTrasRecuperacion": 200,
+  "intentosRecuperacion": [
+    {
+      "estado": 503,
+      "cuerpo": "{\n  \"message\":\"name resolution failed\",\n  \"request_id\":\"45637e2d1141d0736b9c77729835c44e\"\n}"
+    },
+    {
+      "estado": 200,
+      "cuerpo": "{\n  \"id\": 701,\n  \"matriculaId\": 501,\n  \"valor\": 150,\n  \"moneda\": \"USD\",\n  \"estado\": \"PENDIENTE\",\n  \"servicio\": \"pagos\"\n}"
+    }
+  ],
+  "aprobado": true
 }
