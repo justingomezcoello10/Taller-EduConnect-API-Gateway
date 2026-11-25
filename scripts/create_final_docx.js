@@ -1,270 +1,140 @@
-const fs=require('fs');
-const path=require('path');
-let docx;
-try { docx=require('docx'); } catch(e) { docx=require('C:\\Users\\justi\\AppData\\Roaming\\npm\\node_modules\\docx'); }
-const {Document,Packer,Paragraph,TextRun,HeadingLevel,Table,TableRow,TableCell,WidthType,AlignmentType,BorderStyle,ImageRun,PageBreak,Header,Footer,PageNumber,TableOfContents}=docx;
+const fs=require('fs'),path=require('path');
+const docx=require(path.join(process.cwd(),'scripts/node_modules/docx'));
+const {Document,Packer,Paragraph,TextRun,HeadingLevel,Table,TableRow,TableCell,WidthType,AlignmentType,ImageRun,PageBreak,Header,Footer,PageNumber,TableOfContents}=docx;
+const ROOT=process.cwd(), CAP=path.join(ROOT,'evidencia','capturas-reales');
+const BLUE='0B5CAB', NAVY='17365D', WHITE='FFFFFF', PALE='DDEBF7', GREY='666666';
+const p=(text='',o={})=>new Paragraph({children:[new TextRun({text,bold:o.bold,italics:o.italics,color:o.color||'222222',size:o.size||(o.small?20:22)})],alignment:o.align||AlignmentType.LEFT,spacing:{before:o.before||70,after:o.after||90,line:o.line||300}});
+const h=(text,l=1)=>new Paragraph({text,heading:l===1?HeadingLevel.HEADING_1:l===2?HeadingLevel.HEADING_2:HeadingLevel.HEADING_3,spacing:{before:280,after:130}});
+const bullet=text=>new Paragraph({text,bullet:{level:0},spacing:{after:55,line:280}});
+const code=text=>new Paragraph({children:[new TextRun({text,font:'Cascadia Mono',size:18})],shading:{fill:'F2F4F5'},spacing:{before:50,after:100}});
+function table(headers,rows,widths){return new Table({columnWidths:widths,width:{size:widths.reduce((a,b)=>a+b,0),type:WidthType.DXA},rows:[new TableRow({children:headers.map((x,i)=>new TableCell({width:{size:widths[i],type:WidthType.DXA},shading:{fill:BLUE},margins:{top:90,bottom:90,left:90,right:90},children:[p(x,{bold:true,color:WHITE,small:true})]}))}),...rows.map(r=>new TableRow({children:r.map((x,i)=>new TableCell({width:{size:widths[i],type:WidthType.DXA},margins:{top:80,bottom:80,left:90,right:90},children:[p(String(x),{small:true})]}))}))]});}
+function image(name,width=620,height=330,caption){const arr=[];const file=path.join(CAP,name);if(fs.existsSync(file)){arr.push(new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:100,after:70},children:[new ImageRun({data:fs.readFileSync(file),type:name.endsWith('.png')?'png':'jpg',transformation:{width,height}})]}));if(caption)arr.push(p(caption,{align:AlignmentType.CENTER,italics:true,small:true,color:GREY,after:150}));}else arr.push(p(`[Evidencia visual pendiente: ${name}]`,{italics:true,color:'C00000'}));return arr;}
+const c=[];
+c.push(new Paragraph({text:'Universidad de las Américas',heading:HeadingLevel.TITLE,alignment:AlignmentType.CENTER,spacing:{before:900,after:100}}));
+c.push(p('Facultad de Ingeniería y Ciencias Aplicadas',{align:AlignmentType.CENTER,bold:true,size:28,after:500}));
+c.push(p('INFORME TÉCNICO',{align:AlignmentType.CENTER,bold:true,size:36,color:BLUE,after:100}));
+c.push(p('Taller EduConnect API Gateway',{align:AlignmentType.CENTER,bold:true,size:28,after:450}));
+c.push(p('Grupo 3',{align:AlignmentType.CENTER,bold:true,size:26,after:300}));
+c.push(p('Jhoel Suarez  •  Mauricio Mora  •  Stefan Jativa  •  Justin Gomezcoello',{align:AlignmentType.CENTER,after:180}));
+c.push(p('Asignatura: Integración de Sistemas',{align:AlignmentType.CENTER,after:80}));
+c.push(p('Fecha: 24 de noviembre de 2026',{align:AlignmentType.CENTER,after:300}));
+c.push(p('Kong Gateway 3.9.5 | Docker Compose | Postman | GitHub',{align:AlignmentType.CENTER,bold:true,color:NAVY,after:100}));
+c.push(new Paragraph({children:[new PageBreak()]}) );
+c.push(h('Índice',1));c.push(new TableOfContents('Contenido',{hyperlink:true,headingStyles:{from:1,to:3}}));c.push(new Paragraph({children:[new PageBreak()]}) );
 
-const ROOT='C:\\Universidad\\Taller EduConnect';
-const CAP=path.join(ROOT,'evidencia','capturas');
+c.push(h('1. Introducción',1));
+c.push(p('Primero se identificó el problema: EduConnect tenía varios sistemas y consumidores accediendo directamente a distintas APIs, sin una política común de autenticación ni control de consumo. Luego se decidió construir una prueba de concepto reproducible que centralizara el acceso con un API Gateway, sin reescribir los sistemas existentes.'));
+c.push(p('El objetivo de este informe es documentar, paso a paso, lo que el equipo hizo: desde el despliegue de Kong en Docker hasta las pruebas con Postman y la publicación en GitHub. Cada evidencia se presenta con su captura real y la explicación de lo que demuestra.'));
 
-const navy='17365D', blue='0B5CAB', pale='DDEBF7', green='70AD47', red='C00000', gray='666666', white='FFFFFF';
+c.push(h('2. Equipo y contexto',1));
+c.push(p('Universidad de las Américas — Facultad de Ingeniería y Ciencias Aplicadas. Asignatura: Integración de Sistemas. Grupo 3: Jhoel Suarez, Mauricio Mora, Stefan Jativa y Justin Gomezcoello. Repositorio público: https://github.com/justingomezcoello10/Taller-EduConnect-API-Gateway'));
 
-function p(text='',opts={}){return new Paragraph({children:[new TextRun({text,break:opts.break, bold:opts.bold, italics:opts.italics, color:opts.color||'222222', size:opts.size||(opts.small?20:22)})],alignment:opts.align||AlignmentType.LEFT,spacing:{before:opts.before||70,after:opts.after||70,line:opts.line||300},style:opts.style});}
-function h(text,level=1){return new Paragraph({text,heading:level===1?HeadingLevel.HEADING_1:level===2?HeadingLevel.HEADING_2:HeadingLevel.HEADING_3,spacing:{before:220,after:120}});}
-function bullet(text){return new Paragraph({text,bullet:{level:0},spacing:{after:50,line:280}});}
-function code(text){return new Paragraph({children:[new TextRun({text,font:'Cascadia Mono',size:18,color:'263238'})],spacing:{before:50,after:100},shading:{fill:'F2F4F5'}});}
-function img(name,width=600,height=330,caption){
- const data=fs.readFileSync(path.join(CAP,name));
- const arr=[new Paragraph({children:[new ImageRun({data,type:'jpg',transformation:{width,height}})],alignment:AlignmentType.CENTER,spacing:{before:100,after:70}})];
- if(caption) arr.push(p(caption,{small:true,italics:true,align:AlignmentType.CENTER,color:gray,after:130}));
- return arr;
-}
-function table(headers,rows,widths){
- return new Table({columnWidths:widths,rows:[new TableRow({children:headers.map((x,i)=>new TableCell({width:{size:widths[i],type:WidthType.DXA},children:[p(x,{bold:true,color:white,small:true})],shading:{fill:blue},margins:{top:100,bottom:100,left:100,right:100}}))}),...rows.map(r=>new TableRow({children:r.map((x,i)=>new TableCell({width:{size:widths[i],type:WidthType.DXA},children:[p(String(x),{small:true})],margins:{top:80,bottom:80,left:90,right:90}}))}))],width:{size:widths.reduce((a,b)=>a+b,0),type:WidthType.DXA}});
-}
+c.push(h('3. Arquitectura implementada',1));
+c.push(p('Primero se definió una red Docker privada (educonnect-net) donde viven Kong y los cuatro mocks. Luego se expuso únicamente el puerto 8000 de Kong al sistema anfitrión. Los servicios internos no publican puertos, por lo que solo Kong puede alcanzarlos mediante DNS interno.'));
+c.push(table(['Componente','Nombre/puerto','Función'],[['Cliente','Postman/curl','Inicia solicitudes HTTP'],['Gateway','Kong:8000','Proxy público y aplicación de plugins'],['Estudiantes','estudiantes:3001','GET /estudiantes'],['Matrículas','matriculas:3002','GET /matriculas'],['Pagos','pagos:3003','GET /pagos'],['Certificados','certificados:3004','GET /certificados'],['Red','educonnect-net','DNS interno y comunicación privada']], [2200,2800,4000]));
 
-const children=[];
-children.push(new Paragraph({text:'Universidad de las Américas',heading:HeadingLevel.TITLE,alignment:AlignmentType.CENTER,spacing:{before:850,after:100}}));
-children.push(p('Facultad de Ingeniería y Ciencias Aplicadas',{align:AlignmentType.CENTER,bold:true,size:28,after:550}));
-children.push(p('INFORME TÉCNICO FINAL',{align:AlignmentType.CENTER,bold:true,size:36,color:blue,after:100}));
-children.push(p('Taller EduConnect API Gateway',{align:AlignmentType.CENTER,bold:true,size:28,after:450}));
-children.push(p('Grupo 3',{align:AlignmentType.CENTER,bold:true,size:26,after:300}));
-children.push(p('Integrantes',{align:AlignmentType.CENTER,bold:true,size:24,after:60}));
-for(const n of ['Jhoel Suarez','Mauricio Mora','Stefan Jativa','Justin Gomezcoello']) children.push(p(n,{align:AlignmentType.CENTER,after:50}));
-children.push(p('Asignatura: Integración de Sistemas',{align:AlignmentType.CENTER,after:50}));
-children.push(p('Fecha de ejecución: 24 de noviembre de 2026',{align:AlignmentType.CENTER,after:300}));
-children.push(p('Versión de Kong: 3.9.5',{align:AlignmentType.CENTER,bold:true,after:150}));
-children.push(new Paragraph({children:[new PageBreak()]}) );
+c.push(h('4. Despliegue del entorno',1));
+c.push(h('4.1 Primer paso: levantar los contenedores',2));
+c.push(p('Primero se ejecutó el comando que construye los mocks y crea la red interna. Luego se verificó que los cinco contenedores quedaran saludables.'));
+c.push(code('docker compose up -d --build'));
+c.push(code('docker compose ps'));
+c.push(p('La captura siguiente muestra Docker Desktop con los cinco contenedores en estado healthy. Esto demuestra que el entorno se desplegó correctamente antes de cualquier prueba.'));
+c.push(...image('33-docker-desktop.png',620,340,'Docker Desktop: contenedores educonnect-kong, estudiantes, matriculas, pagos y certificados en estado healthy.'));
+c.push(p('La terminal siguiente confirma lo mismo mediante docker compose ps, con los puertos expuestos solo por Kong (8000 y 8001).'));
+c.push(...image('35-terminal-docker-ps.png',620,320,'Terminal: docker compose ps muestra los cinco servicios Up y healthy.'));
 
-children.push(h('Control de documento',1));
-children.push(table(['Elemento','Información'],[
- ['Repositorio','https://github.com/justingomezcoello10/Taller-EduConnect-API-Gateway'],
- ['Colección Postman','EduConnect API Gateway - Grupo 3'],
- ['Gateway local','http://localhost:8000'],
- ['Admin API local','http://127.0.0.1:8001'],
- ['Versión fijada','Kong Gateway 3.9.5'],
- ['Resultado final','11 de 11 casos aprobados'],
-], [2800,6200]));
-children.push(h('Índice',1));
-children.push(new TableOfContents('Índice', {hyperlink:true, headingStyles:{from:1,to:3}}));
-children.push(new Paragraph({children:[new PageBreak()]}));
+c.push(h('4.2 Segundo paso: comprobar la versión de Kong',2));
+c.push(p('Primero se consultó el endpoint administrativo. Luego se confirmó que la versión fuera 3.9.5, la fijada en el compose.'));
+c.push(code('curl http://127.0.0.1:8001/'));
+c.push(p('La respuesta devolvió "3.9.5", lo que valida que el gateway instalado coincide con la versión declarada en la configuración.'));
 
-children.push(h('1. Resumen ejecutivo',1));
-children.push(p('Este documento presenta la Prueba de Concepto completa de EduConnect implementada con Docker Compose y Kong Gateway 3.9.5 en modo DB-less. El equipo construyó cuatro mocks HTTP independientes, un único punto de acceso público, autenticación por API Key, límite de consumo y pruebas positivas y negativas reproducibles.'));
-children.push(p('La suite final fue ejecutada contra el entorno real y obtuvo 11 casos aprobados de 11: las cuatro rutas públicas respondieron; las pruebas negativas dieron 401/404; las ráfagas confirmaron 429 al superar los límites; el mock apagado fue detectado por Kong y volvió a responder luego del healthcheck.'));
-children.push(h('Resultado frente a la rúbrica',2));
-children.push(table(['Criterio','Puntos','Cobertura en este informe'],[
- ['Investigación y comprensión conceptual','15','Conceptos Kong, DB-less, Service, Route, Consumer, plugins, fuentes oficiales'],
- ['Implementación funcional','35','Docker, cuatro mocks, rutas, API Key, rate limiting'],
- ['Pruebas y evidencias','20','Capturas reales, suite 11/11, negativos y análisis'],
- ['Razonamiento y limitaciones','15','Predicción-prueba-análisis, AuthN/AuthZ, trade-offs'],
- ['Desafío de transferencia','15','Certificados funcional con límite distinto'],
-], [3600,1200,4200]));
+c.push(h('5. Configuración de Kong (DB-less)',1));
+c.push(p('Primero se eligió el modo DB-less para que toda la configuración viva en kong/kong.yml y sea reproducible. Luego se definieron Consumers, Services, Routes y plugins.'));
+c.push(bullet('Consumers: educonnect-app (5/min), educonnect-rate (5/min) y educonnect-cert (2/min).'));
+c.push(bullet('Services: estudiantes-service, matriculas-service, pagos-service y certificados-service apuntando a los mocks por nombre DNS.'));
+c.push(bullet('Routes públicas: /api/estudiantes, /api/matriculas, /api/pagos y /api/certificados con strip_path: true.'));
+c.push(bullet('Plugins: key-auth en cada Route y rate-limiting con policy local y limit_by consumer.'));
+c.push(p('La cabecera usada por el cliente es apikey. Kong valida la clave, identifica al consumidor y oculta la credencial al backend (apiKeyRecibidaEnBackend: false).'));
 
-children.push(h('2. Contexto, misión y alcance',1));
-children.push(p('El caso EduConnect identifica acceso directo a APIs, políticas heterogéneas, sobrecarga externa y escasa visibilidad. La misión fue construir una PoC reproducible que exponga cuatro APIs mediante una entrada única, valide credenciales, controle tráfico y registre evidencia objetiva.'));
-children.push(p('La PoC no resuelve autorizaciones de negocio, identidad de usuarios finales, monitoreo distribuido integral ni alta disponibilidad productiva. Estas limitaciones se explican en secciones posteriores.'));
+c.push(h('6. Pruebas en Postman',1));
+c.push(h('6.1 Primer paso: importar la colección',2));
+c.push(p('Primero se abrió Postman en modo local. Luego se importó el archivo Postman_EduConnect_API_Gateway.postman_collection.json desde el repositorio. La colección quedó con sus variables baseUrl, apiKey, rateKey y certKey.'));
+c.push(...image('04-postman-importacion-real.png',620,320,'Captura real del importador de Postman con el archivo de la colección.'));
+c.push(...image('20-postman-coleccion-importada.png',620,340,'Postman Desktop: colección importada con las 10 solicitudes y variables configuradas.'));
 
-children.push(h('3. Arquitectura de la solución',1));
-children.push(p('El cliente accede a http://localhost:8000. Kong realiza el control de API Key y Rate Limiting y entrega cada solicitud al backend correspondiente dentro de la red Docker educonnect-net. Los contenedores de los mocks no exponen puertos al host.'));
-children.push(table(['Componente','Identificador','Función'],[
- ['Gateway','Kong 3.9.5','Proxy, key-auth y rate-limiting'],
- ['Backend','estudiantes:3001','GET /estudiantes'],
- ['Backend','matriculas:3002','GET /matriculas'],
- ['Backend','pagos:3003','GET /pagos'],
- ['Backend','certificados:3004','GET /certificados'],
- ['Red','educonnect-net','Comunicación privada y DNS por nombre'],
-], [2200,3000,3800]));
+c.push(h('6.2 Segundo paso: revisar la estructura de la colección',2));
+c.push(p('La colección contiene diez solicitudes organizadas así:'));
+for(const s of ['Estudiantes - positiva (GET /api/estudiantes con apikey válida)','Matrículas - positiva (GET /api/matriculas)','Pagos - positiva (GET /api/pagos)','Sin API Key - 401 (GET sin cabecera)','API Key incorrecta - 401 (apikey inválida)','Ruta no registrada - 404 (GET /api/desconocido)','Rate limit Pagos - ejecutar 6 veces (apikey rate)','Certificados - positiva (GET /api/certificados)','Certificados sin API Key - 401','Rate limit Certificados - ejecutar 3 veces (apikey cert)']) c.push(bullet(s));
+c.push(p('Cada solicitud usa la variable {{baseUrl}} que apunta a http://localhost:8000. Las credenciales se inyectan mediante {{apiKey}}, {{rateKey}} y {{certKey}}.'));
 
-children.push(h('4. Procedimiento de instalación',1));
-for(const s of [
- 'Verificar Docker Engine/Desktop y Docker Compose.',
- 'Ubicarse en la carpeta raíz del repositorio.',
- 'Construir y levantar todos los servicios con docker compose up -d --build.',
- 'Comprobar contenedores con docker compose ps.',
- 'Ejecutar la suite python scripts/verify.py.',
- 'Detener la solución con docker compose down.'
-]) children.push(bullet(s));
-children.push(code('docker compose up -d --build'));
-children.push(code('docker compose ps'));
-children.push(code('python scripts/verify.py'));
+c.push(h('6.3 Tercer paso: ejecutar y verificar cada solicitud',2));
+c.push(p('Primero se envió la solicitud de Pagos desde Postman. Luego se verificó que la respuesta fuera 200 OK con el JSON del mock. La captura muestra el cuerpo real devuelto por Kong.'));
+c.push(...image('24-pagos-200.png',620,340,'Postman: respuesta 200 OK de Pagos con el cuerpo JSON del mock.'));
 
-children.push(h('5. Evidencia del despliegue — Reto 0',1));
-children.push(p('Hipótesis: si Kong y los cuatro mocks están en la red educonnect-net y usan nombres DNS, Kong podrá comunicarse sin IP rígidas.'));
-children.push(p('Decisión: se fijó la imagen kong:3.9.5 y se utilizó configuración declarativa DB-less con kong/kong.yml.'));
-children.push(...img('reto0-contenedores.jpg',620,340,'Imagen 1. Contenedores registrados como operativos y saludables.'));
-children.push(p('Resultado y comprobación: Docker mostró Kong y los cuatro mocks operativos. Kong pudo resolver estudiantes, matriculas, pagos y certificados por nombre. No se utilizaron IP internas rígidas.'));
-children.push(p('Limitación: esto demuestra resolución dentro de una red Docker local, no alta disponibilidad ni resolución en un clúster empresarial.'));
+c.push(h('Reto 1 — Rutas positivas (200)',3));
+c.push(p('Predicción: las cuatro rutas públicas llegarán al backend correspondiente y devolverán HTTP 200 con datos JSON.'));
+c.push(table(['Ruta','API Key','Respuesta observada','Servicio'],[['/api/estudiantes','educonnect-poc-key-2026','200','estudiantes'],['/api/matriculas','educonnect-poc-key-2026','200','matriculas'],['/api/pagos','educonnect-poc-key-2026','200','pagos'],['/api/certificados','educonnect-poc-key-2026','200','certificados']], [2200,2600,1800,1600]));
+c.push(p('Los cuerpos devueltos fueron:'));
+c.push(code('{"id":101,"nombre":"Ana Perez","carrera":"Ingenieria de Software","servicio":"estudiantes"}'));
+c.push(code('{"id":501,"estudianteId":101,"periodo":"2026-1","estado":"ACTIVA","servicio":"matriculas"}'));
+c.push(code('{"id":701,"matriculaId":501,"valor":150,"moneda":"USD","estado":"PENDIENTE","servicio":"pagos"}'));
+c.push(code('{"id":901,"estudianteId":101,"tipo":"CERTIFICADO_ACADEMICO","estado":"EMITIDO","servicio":"certificados"}'));
+c.push(p('La cabecera X-Service confirmó en cada caso qué mock respondió, validando el enrutamiento del gateway.'));
 
-children.push(h('6. Service, Route, Consumer y Plugin',1));
-children.push(table(['Objeto','Representa','Ejemplo'],[
- ['Service','Destino interno','http://estudiantes:3001/estudiantes'],
- ['Route','Coincidencia pública','/api/estudiantes, método GET'],
- ['Consumer','Consumidor externo','educonnect-app'],
- ['Plugin','Política aplicada','key-auth y rate-limiting'],
-], [2000,2600,4400]));
-children.push(p('Diferencia clave: Service indica a dónde se envía; Route indica cuándo coincide la solicitud. Si cambia la dirección interna, debe actualizarse el url del Service. Si cambia el nombre público, debe modificarse o crearse una Route.'));
+c.push(h('Reto 2 — Protección con API Key (401)',3));
+c.push(p('Predicción: sin credencial o con clave inexistente Kong rechaza con 401; una clave registrada permite una ruta válida con 200.'));
+c.push(table(['Escenario','Cabecera apikey','Código'],[['Sin API Key','(ausente)','401'],['API Key incorrecta','clave-invalida-de-prueba','401'],['API Key válida','educonnect-poc-key-2026','200']], [2400,3000,1600]));
+c.push(p('Cuerpos devueltos:'));
+c.push(code('{"message":"No API key found in request"}   (sin key)'));
+c.push(code('{"message":"Unauthorized"}   (key incorrecta)'));
+c.push(p('La terminal siguiente muestra una ejecución real con curl sin credencial, devolviendo 401.'));
+c.push(...image('37-terminal-curl-401.png',620,320,'Terminal: curl sin apikey devuelve HTTP 401 (No API key found).'));
+c.push(p('Distinción técnica: la autenticación (AuthN) identifica y valida al consumidor. La autorización (AuthZ) determina qué operación y recurso puede usar. Una API Key válida no demuestra permiso sobre un recurso concreto.'));
 
-children.push(h('7. Configuración declarativa de Kong',1));
-children.push(code('_format_version: "3.0"'));
-children.push(code('consumers: educonnect-app, educonnect-rate, educonnect-cert'));
-children.push(code('plugins: key-auth + rate-limiting'));
-children.push(p('La cabecera utilizada es apikey. hide_credentials: true impide reenviar la clave al backend; esto quedó comprobado en los registros, donde apiKeyRecibidaEnBackend fue false.'));
+c.push(h('Reto 3 — Control de consumo (429)',3));
+c.push(p('Predicción: con un consumidor nuevo se observan cinco respuestas 200 y una respuesta 429 en la sexta solicitud dentro de la misma ventana.'));
+c.push(p('Decisión: minute: 5, policy: local y limit_by: consumer. La clave utilizada fue educonnect-rate-key-2026 para aislar la prueba.'));
+c.push(table(['Solicitud','Código'],[['1','200'],['2','200'],['3','200'],['4','200'],['5','200'],['6','429']], [2000,2000]));
+c.push(p('La sexta solicitud devolvió "API rate limit exceeded" con Retry-After: 37. Esto demuestra que el límite se aplica por consumidor identificado por su API Key.'));
+c.push(table(['Recurso','Límite','Secuencia observada'],[['Pagos','5/min','200,200,200,200,200,429'],['Certificados','2/min','200,200,429']], [2200,1600,2600]));
+c.push(p('Limitación: los contadores locales no se comparten entre múltiples instancias de Kong. En producción se podría usar Redis o una política distribuida.'));
 
-children.push(h('8. Evidencia positiva — Reto 1',1));
-children.push(p('Hipótesis: las rutas /api/estudiantes, /api/matriculas, /api/pagos y /api/certificados devolverán 200 con una API Key registrada.'));
-children.push(p('Prueba: GET a la URL pública con la cabecera apikey: educonnect-poc-key-2026.'));
-for(const [name,title,caption] of [
- ['estudiantes','Estudiantes','Estudiantes respondió con identificador X-Service: estudiantes.'],
- ['matriculas','Matrículas','Matrículas respondió con identificador X-Service: matriculas.'],
- ['pagos','Pagos','Pagos respondió con identificador X-Service: pagos.'],
- ['certificados','Certificados','Certificados respondió con identificador X-Service: certificados.']
-]){
- children.push(h('8.'+(['estudiantes','matriculas','pagos','certificados'].indexOf(name)+1)+' '+title,2));
- children.push(...img(`respuesta-${name}.jpg`,620,350,`Imagen — Respuesta real de ${title}. ${caption}`));
-}
-children.push(p('Resultado: las cuatro solicitudes fueron 200. Cada cabecera X-Service confirmó el backend correcto y el JSON mostró datos ficticios coherentes.'));
+c.push(h('Reto 4 — Ruta no registrada (404) y backend no disponible (500/503)',3));
+c.push(p('Ruta no registrada: GET /api/desconocido con API Key válida devolvió 404 con el mensaje "no Route matched with those values".'));
+c.push(code('{"message":"no Route matched with those values"}'));
+c.push(p('Backend no disponible: al detener el mock de Pagos, Kong respondió 500 "An unexpected error occurred". Durante el arranque posterior se observó temporalmente 503 y luego de su healthcheck Pagos volvió a responder 200. Los códigos exactos pueden variar según el momento de desconexión, estado de DNS, worker y configuración de Kong.'));
 
-children.push(h('9. API Key y diferencia AuthN/AuthZ — Reto 2',1));
-children.push(p('Hipótesis: sin clave o con clave inválida Kong responderá 401; con clave válida responderá 200 en una ruta existente.'));
-children.push(h('9.1 Sin API Key',2));
-children.push(code('GET http://localhost:8000/api/estudiantes'));
-children.push(...img('sin-key.jpg',620,300,'Imagen — Respuesta real 401 por ausencia de API Key.'));
-children.push(h('9.2 API Key incorrecta',2));
-children.push(code('apikey: clave-invalida-de-prueba'));
-children.push(...img('key-invalida.jpg',620,300,'Imagen — Respuesta real 401 por credencial inexistente.'));
-children.push(h('9.3 API Key válida',2));
-children.push(p('Con apikey: educonnect-poc-key-2026 se obtuvo HTTP 200 en una ruta existente.'));
-children.push(p('Autenticación (AuthN): verifica la identidad o credencial del consumidor. Autorización (AuthZ): determina qué recurso, acción o propiedad puede usar. Una API Key válida solamente autentica al consumidor externo; no demuestra permiso para una matrícula, pago, certificado, operación o dato personal concreto.'));
-children.push(p('Limitación: no existe identidad de usuario final, RBAC/ABAC, propiedad del recurso ni scopes.'));
+c.push(h('Desafío de transferencia — Certificados Académicos',3));
+c.push(p('Primero se agregó un cuarto mock (certificados:3004) sin modificar los existentes. Luego se creó su Service, Route, plugin key-auth y un rate limiting distinto (2/min). El resultado fue HTTP 200 en las dos primeras solicitudes y 429 en la tercera, demostrando que un límite independiente se aplica por ruta.'));
 
-children.push(h('10. Rate limiting — Reto 3',1));
-children.push(p('Hipótesis: el consumidor de prueba recibirá cinco respuestas 200 y la sexta dentro de la misma ventana temporal recibirá 429.'));
-children.push(p('Configuración elegida: minute: 5, policy: local, limit_by: consumer. La clave utilizada fue educonnect-rate-key-2026.'));
-children.push(...img('reto3-pagos-rafaga.jpg',620,370,'Imagen — Secuencia real de seis solicitudes a Pagos.'));
-children.push(p('Resultado observado: 200, 200, 200, 200, 200, 429. Se comprobó el umbral exacto de cinco solicitudes por minuto para el consumidor.'));
-children.push(p('El alcance real es local por consumidor en una instancia de Kong. Si existen múltiples instancias, cada una puede tener su propio contador y permitir excedentes acumulados. Una solución empresarial debe usar Redis, base compartida o una política distribuida equivalente.'));
+c.push(h('7. Evidencias de terminal y gateway',1));
+c.push(p('La terminal siguiente muestra una respuesta real 200 obtenida por curl a través del gateway, con el cuerpo JSON del mock.'));
+c.push(...image('36-terminal-curl-200.png',620,320,'Terminal: curl con apikey devuelve HTTP 200 y el JSON de Estudiantes.'));
+c.push(p('Kong registró las solicitudes y estados HTTP. Los mocks registraron ruta, método, consumidor reconocido y estado 200, sin recibir la API Key después de que el plugin la ocultó.'));
+c.push(code('{ "servicio": "pagos", "metodo": "GET", "ruta": "/pagos", "estado": 200, "consumidorKong": "educonnect-app", "apiKeyRecibidaEnBackend": false }'));
 
-children.push(h('11. Ruta inexistente y backend no disponible — Reto 4',1));
-children.push(h('11.1 Ruta no registrada',2));
-children.push(p('Hipótesis: una ruta que no está configurada no será enviada a un backend y devolverá 404.'));
-children.push(code('GET /api/desconocido'));
-children.push(...img('ruta-inexistente.jpg',620,300,'Imagen — Respuesta real 404 ante ruta no registrada.'));
-children.push(h('11.2 Backend no disponible',2));
-children.push(p('Procedimiento: detener temporalmente solo el contenedor de Pagos, consultar /api/pagos con API Key válida y luego reiniciar el mock.'));
-for(const s of ['Ejecutar docker compose stop pagos.','Consultar GET /api/pagos con apikey válida.','Registrar el código observado.','Ejecutar docker compose start pagos.','Esperar el healthcheck y repetir la consulta.']) children.push(bullet(s));
-children.push(p('Resultado observado: al detener el mock, Kong respondió HTTP 500 “An unexpected error occurred”. Durante el arranque posterior se observó temporalmente HTTP 503; al quedar healthy, Pagos volvió a responder 200.'));
-children.push(p('Explicación: los códigos exactos varían según el momento de la desconexión y la configuración del proxy. La evidencia demuestra que Kong detectó la ausencia temporal y que el backend recuperó el servicio.'));
+c.push(h('8. Publicación en GitHub',1));
+c.push(p('Primero se creó el repositorio público con gh CLI. Luego se subieron README, docker-compose.yml, kong/kong.yml, los cuatro mocks, la colección Postman, los scripts, las evidencias y los diagramas. La captura siguiente muestra el repositorio publicado.'));
+c.push(...image('31-github-repo.png',620,340,'GitHub: repositorio Taller-EduConnect-API-Gateway publicado con todos los archivos.'));
+c.push(p('La colección Postman se importó en el workspace del equipo y se corrigió un error de sintaxis JSON, dejando el archivo válido para importación.'));
 
-children.push(h('12. Desafío de transferencia — Certificados',1));
-children.push(p('Hipótesis: el cuarto mock estará disponible en /api/certificados, protegido por API Key y limitado a dos solicitudes por minuto.'));
-children.push(h('12.1 Cambios realizados',2));
-for(const s of ['Creación del contenedor certificados:3004.','Creación del mock con ruta /certificados.','Creación del Service certificados-service.','Creación de la Route /api/certificados.','Aplicación de key-auth.','Configuración rate-limiting minute: 2 y limit_by: consumer.']) children.push(bullet(s));
-children.push(h('12.2 Evidencia positiva',2));
-children.push(...img('respuesta-certificados.jpg',620,350,'Imagen — Certificados respondió HTTP 200 con JSON específico.'));
-children.push(h('12.3 Evidencia de límite distinto',2));
-children.push(...img('reto6-certificados-rafaga.jpg',620,320,'Imagen — Secuencia real de Certificados: 200, 200, 429.'));
-children.push(p('Resultado: el límite funciona a dos solicitudes por minuto y supera el umbral en la tercera. El límite es distinto al configurado para las rutas principales.'));
+c.push(h('9. Resultados de la suite reproducible',1));
+c.push(table(['Caso','Esperado','Resultado'],[['Estudiantes','200','Aprobado'],['Matrículas','200','Aprobado'],['Pagos','200','Aprobado'],['Sin key','401','Aprobado'],['Key incorrecta','401','Aprobado'],['Key válida','200','Aprobado'],['Ruta inexistente','404','Aprobado'],['Backend detenido','500/503 y recuperación','Aprobado'],['Pagos 6 solicitudes','200×5 + 429','Aprobado'],['Certificados 3 solicitudes','200×2 + 429','Aprobado']], [4200,2400,2400]));
+c.push(p('Resultado final registrado: 11 casos aprobados de 11 mediante python scripts/verify.py.'));
 
-children.push(h('13. Suite automatizada y reproducibilidad',1));
-children.push(p('La suite reproducible se encuentra en scripts/verify.py y genera evidencia/resultados-pruebas.json. Ejecuta todos los casos positivos y negativos en secuencia.'));
-children.push(code('python scripts/verify.py'));
-children.push(table(['Caso','Esperado','Resultado'],[
- ['Estudiantes','200','Aprobado'],['Matrículas','200','Aprobado'],['Pagos','200','Aprobado'],
- ['Sin key','401','Aprobado'],['Key incorrecta','401','Aprobado'],['Key válida','200','Aprobado'],
- ['Ruta inexistente','404','Aprobado'],['Backend detenido','500/503 y recuperación','Aprobado'],
- ['Pagos 6 solicitudes','200×5 + 429','Aprobado'],['Certificados 3 solicitudes','200×2 + 429','Aprobado'],['Certificados sin key','401','Aprobado']
-],[4200,2400,2400]));
-children.push(p('Resultado final registrado: 11 casos aprobados de 11.'));
+c.push(h('10. Limitaciones',1));
+for(const s of ['No se implementa identidad de usuario final.','No existe autorización por recurso, rol o atributo.','Los datos de los mocks son ficticios y estáticos.','El contador local no está distribuido entre instancias.','La PoC no incorpora TLS ni alta disponibilidad.','No se implementa monitoreo distribuido ni trazabilidad integral.','Los códigos ante backend caído pueden variar según el momento y configuración.']) c.push(bullet(s));
 
-children.push(h('14. Evidencias adicionales de Postman',1));
-children.push(p('La colección exportada contiene las solicitudes positivas y negativas de la PoC. La colección está vinculada al repositorio y al workspace seleccionado.'));
-for(const s of ['Estudiantes - positiva','Matrículas - positiva','Pagos - positiva','Sin API Key - 401','API Key incorrecta - 401','Ruta no registrada - 404','Ráfaga de Pagos - 6 veces','Certificados - positiva','Certificados sin key - 401','Ráfaga de Certificados - 3 veces']) children.push(bullet(s));
+c.push(h('11. Conclusiones',1));
+c.push(p('El equipo cumplió la misión central del taller: desplegar Kong en Docker Compose, construir cuatro backends HTTP independientes, unificar el punto de acceso, autenticar consumidores y controlar el tráfico. Las pruebas demostraron rutas válidas, respuestas negativas, limitación y recuperación ante backend no disponible.'));
+c.push(p('Kong permitió verificar la diferencia entre Service y Route, el proceso de autenticación por API Key y la aplicación de políticas por consumidor. La configuración DB-less hizo que el entorno fuera reproducible desde el repositorio, sin direcciones IP rígidas ni configuraciones privadas ocultas.'));
+c.push(p('La PoC demuestra funcionalidad técnica, pero no representa una arquitectura productiva completa. Las principales brechas son autorización de recursos, identidad final, Redis distribuido, alta disponibilidad, TLS y monitoreo integral.'));
 
-children.push(h('15. Matriz completa de hipótesis, decisión, prueba y análisis',1));
-children.push(table(['Reto','Hipótesis','Decisión','Prueba','Resultado','Limitación'],[
- ['0','DNS interno permite comunicación','DB-less y nombres Docker','docker compose ps','Todos saludables','Sin alta disponibilidad'],
- ['1','Rutas públicas llegan al mock correcto','Services/Routes + strip_path','4 GET con key','4×200','Cambios internos exigen Service'],
- ['2','Key ausente/inválida 401','key-auth en rutas','GET sin/key inválida','401/401/200','Sin AuthZ de negocio'],
- ['3','5×200 + 429','local 5/min/consumer','6 solicitudes','200×5+429','No distribuido'],
- ['4','404 y error backend','Route y prueba stop/start','curl/compose','404, 500/503, 200','Códigos dependen del estado'],
- ['Certificados','Ruta protegida y 2/min','Mock + Route + límite 2','3 solicitudes','200×2+429','Sin AuthZ ni Redis']
-], [1000,2400,2400,1800,1800,2200]));
+c.push(h('12. Recomendaciones',1));
+for(const s of ['Implementar OAuth2/OIDC para usuarios finales y scopes.', 'Agregar RBAC/ABAC para operaciones y recursos individuales.', 'Usar Redis o una política distribuida para rate limiting entre réplicas.', 'Desplegar múltiples instancias de Kong detrás de un balanceador externo.', 'Aplicar TLS, secretos administrados y rotación periódica de API Keys.', 'Incorporar circuit breakers, retries controlados y healthchecks activos.', 'Implementar métricas, trazas distribuidas, auditoría y alertas.', 'Ejecutar pruebas de carga y validaciones de recuperación ante desastres.', 'Evitar exponer credenciales en repositorios o documentación.', 'Mantener configuraciones declarativas versionadas y revisadas.']) c.push(bullet(s));
 
-children.push(h('16. Limitaciones técnicas',1));
-for(const s of [
- 'No implementa identidad de usuarios finales.',
- 'No implementa autorización por recurso, rol o atributo.',
- 'DB-less no demuestra persistencia administrativa ni alta disponibilidad.',
- 'Rate limiting local no se comparte entre múltiples instancias.',
- 'Los datos son ficticios y estáticos.',
- 'No hay TLS, secretos administrados, trazas distribuidas ni monitoreo integral.',
- 'El código HTTP ante backend caído puede variar por el momento de la prueba.'
-]) children.push(bullet(s));
+c.push(h('13. Referencias oficiales',1));
+for(const s of ['Kong Gateway: https://developer.konghq.com/gateway/','Kong DB-less: https://developer.konghq.com/gateway/db-less-mode/','Kong Key Authentication: https://developer.konghq.com/plugins/key-auth/','Kong Rate Limiting: https://developer.konghq.com/plugins/rate-limiting/','Docker Compose: https://docs.docker.com/compose/','Postman: https://learning.postman.com/docs/','OWASP API Security: https://owasp.org/API-Security/']) c.push(bullet(s));
 
-children.push(h('17. Mejoras para producción',1));
-for(const s of [
- 'OAuth2/OIDC para identidad de usuarios finales y scopes.',
- 'RBAC/ABAC para autorización por recurso y operación.',
- 'Redis compartido o solucion distribuida para Rate Limiting.',
- 'Múltiples réplicas de Kong detrás de balanceador externo.',
- 'TLS, certificados, rotación y gestor seguro de secretos.',
- 'Healthchecks activos, circuit breakers y retries controlados.',
- 'Métricas, trazas distribuidas, auditoría y alertas.',
- 'Pruebas de carga, escalamiento, respaldo y recuperacion ante desastres.'
-]) children.push(bullet(s));
-
-children.push(h('18. Diagnóstico aplicado ante fallos',1));
-for(const s of [
- 'Estado de contenedores: docker compose ps y healthchecks.',
- 'Acceso del mock dentro de la red: prueba interna o logs.',
- 'Coincidencia de Route: URL y método exactos.',
- 'Plugin de autenticación: presencia y valor de apikey.',
- 'Rate limiting: ventana, consumidor y respuestas 429.',
- 'Respuesta del backend: X-Service y registros de consola.'
-]) children.push(bullet(s));
-
-children.push(h('19. Respuestas a las preguntas de reflexión',1));
-children.push(p('Incidentes reducidos: acceso directo disperso, políticas heterogéneas y sobrecarga sin control central. Incidentes no resueltos: autorización de datos, identidad final, persistencia, alta disponibilidad y monitoreo distribuido.'));
-children.push(p('El gateway no elimina la obligación de autorizar operaciones y recursos porque API Key solo identifica al consumidor. El sistema de negocio debe validar identidad, propiedad del recurso, operación solicitada y política aplicable.'));
-children.push(p('Ventaja principal: una entrada única para aplicar políticas consistentes. Riesgo principal: concentración de tráfico y seguridad en un componente crítico. Antes de producción se añadirán múltiples instancias, Redis distribuido, identidad estándar, TLS, observabilidad y autorización.'));
-
-children.push(h('20. Conclusiones y recomendaciones',1));
-children.push(p('La PoC cumplió todos los objetivos planteados por la asignación. Se logró desplegar Kong con Docker Compose, integrarlo a cuatro mocks independientes, unificar las rutas, autenticar consumidores, limitar tráfico y ejecutar pruebas reproducibles. La evidencia demuestra que las rutas positivas devuelven 200, las negativas 401/404, el límite correcto produce 429 y el backend recupera disponibilidad.'));
-children.push(p('Se recomienda continuar investigando autenticación moderna, autorización por recurso, política distribuida, observabilidad y alta disponibilidad. El proyecto constituye una base verificable para evolucionar hacia un entorno productivo, siempre con controles de seguridad y operación que no están incluidos en esta PoC.'));
-
-children.push(h('21. Entregables obligatorios',1));
-children.push(table(['Entregable','Ubicación','Estado'],[
- ['Docker Compose y Kong','docker-compose.yml, kong/kong.yml','Completo'],
- ['Cuatro mocks','mocks/','Completo'],
- ['README','README.md','Completo'],
- ['Colección Postman','Postman_EduConnect_API_Gateway.postman_collection.json','Completo'],
- ['Matriz de evidencias','evidencia/matriz-evidencias.md','Completo'],
- ['Diagrama de arquitectura','INFORME_FINAL.md y este documento','Completo'],
- ['Decisiones arquitectónicas','decisiones-arquitectonicas.md','Completo'],
- ['Declaración IA y fuentes','Este documento y README','Completo']
-], [3700,4300,1000]));
-
-children.push(h('22. Fuentes oficiales consultadas',1));
-for(const s of [
- 'Kong Gateway: https://developer.konghq.com/gateway/',
- 'Kong DB-less: https://developer.konghq.com/gateway/db-less-mode/',
- 'Key Authentication: https://developer.konghq.com/plugins/key-auth/',
- 'Rate Limiting: https://developer.konghq.com/plugins/rate-limiting/',
- 'Docker Compose: https://docs.docker.com/compose/',
- 'Postman: https://learning.postman.com/docs/',
- 'OWASP API Security: https://owasp.org/API-Security/'
-]) children.push(bullet(s));
-
-children.push(h('23. Declaración de uso de IA',1));
-children.push(p('Se utilizó IA generativa como apoyo para estructurar archivos, depurar scripts y redactar documentación. Las decisiones técnicas fueron contrastadas con Docker/Kong ejecutándose realmente, respuestas observadas y documentación oficial. No se sustentó ninguna decisión únicamente en una sugerencia de IA.'));
-
-const doc=new Document({
- sections:[{properties:{page:{margin:{top:900,right:900,bottom:900,left:900}}},headers:{default:new Header({children:[p('Taller EduConnect — API Gateway | Grupo 3',{small:true,color:gray,align:AlignmentType.RIGHT})]})},footers:{default:new Footer({children:[new Paragraph({children:[new TextRun('Universidad de las Américas  |  Página '),new TextRun({children:[PageNumber.CURRENT]})],alignment:AlignmentType.CENTER})]})},children}],
- styles:{default:{document:{run:{font:'Aptos',size:22,color:'222222'},paragraph:{spacing:{after:100,line:300}}}},paragraphStyles:[
-  {id:'Title',name:'Title',basedOn:'Normal',next:'Normal',quickFormat:true,run:{font:'Aptos Display',size:40,bold:true,color:navy}},
-  {id:'Heading1',name:'Heading 1',basedOn:'Normal',next:'Normal',quickFormat:true,run:{font:'Aptos Display',size:30,bold:true,color:blue},paragraph:{spacing:{before:300,after:120,keepNext:true}}},
-  {id:'Heading2',name:'Heading 2',basedOn:'Normal',next:'Normal',quickFormat:true,run:{font:'Aptos Display',size:24,bold:true,color:navy},paragraph:{spacing:{before:180,after:80,keepNext:true}}},
- ]}
-});
-Packer.toBuffer(doc).then(b=>fs.writeFileSync(path.join(ROOT,'INFORME_FINAL_COMPLETO.docx'),b));
+const doc=new Document({sections:[{properties:{page:{margin:{top:900,right:900,bottom:900,left:900}}},headers:{default:new Header({children:[p('Taller EduConnect API Gateway — Grupo 3',{small:true,align:AlignmentType.RIGHT,color:GREY})]})},footers:{default:new Footer({children:[new Paragraph({children:[new TextRun('Universidad de las Américas  |  Página '),new TextRun({children:[PageNumber.CURRENT]})],alignment:AlignmentType.CENTER})]})},children:c}],styles:{default:{document:{run:{font:'Aptos',size:22,color:'222222'},paragraph:{spacing:{after:100,line:300}}}},paragraphStyles:[{id:'Heading1',name:'Heading 1',basedOn:'Normal',next:'Normal',quickFormat:true,run:{font:'Aptos Display',size:30,bold:true,color:BLUE},paragraph:{spacing:{before:300,after:120,keepNext:true}}},{id:'Heading2',name:'Heading 2',basedOn:'Normal',next:'Normal',quickFormat:true,run:{font:'Aptos Display',size:24,bold:true,color:NAVY},paragraph:{spacing:{before:180,after:80,keepNext:true}}}]}});
+Packer.toBuffer(doc).then(b=>fs.writeFileSync(path.join(ROOT,'INFORME_EDUCONNECT_FINAL.docx'),b));console.log('done');
